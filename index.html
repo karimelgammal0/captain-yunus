@@ -155,6 +155,28 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-80px);background:var(--n);color:#fff;border:3px solid var(--y);border-radius:20px;padding:8px 18px;font-weight:900;z-index:100;transition:transform .35s;max-width:92vw;text-align:center}.toast.show{transform:translate(-50%,0)}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:90}
 @media (max-height:460px) and (orientation:landscape){#cv{width:min(100%,calc((100dvh - 120px)*2))}.runbtns{padding:6px;flex:none}.btn.jump{padding:8px;font-size:1.1rem;height:auto;min-height:0}.logo .l2{font-size:2.8rem}}
+
+/* modes */
+.modehint{background:#fff;border:3px dashed var(--b);border-radius:18px;padding:14px;font-weight:900;text-align:center;line-height:1.8;width:100%;max-width:520px;align-self:center}
+.penq{display:flex;gap:8px;align-items:flex-start;background:#fff;border-bottom:4px solid var(--y);padding:8px 12px;font-weight:900;font-size:1.1rem;line-height:1.7}
+.penq .spk{flex:none}
+.pen{position:relative;direction:ltr;height:min(400px,56dvh);background:repeating-linear-gradient(90deg,#2f9e44 0 12.5%,#37b24d 12.5% 25%);overflow:hidden}
+.pgoal{position:absolute;left:3%;right:3%;top:8px;height:62%;border:6px solid #fff;border-bottom:0;background:rgba(255,255,255,.1)}
+.zones{position:absolute;inset:0}
+.zone{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;direction:rtl;padding:4px;font-weight:900;font-size:.86rem;line-height:1.3;background:rgba(255,255,255,.9);border:3px solid var(--n);border-radius:14px;color:var(--n);z-index:3;transition:transform .1s}
+.zone:active{transform:scale(.97)}
+.zone.z1{left:2%;top:4%;width:42%;height:43%}.zone.z2{right:2%;top:4%;width:42%;height:43%}.zone.z3{left:2%;bottom:4%;width:42%;height:43%}.zone.z4{right:2%;bottom:4%;width:42%;height:43%}
+.zone.zl{left:2%;top:6%;width:42%;height:86%;font-size:1.4rem}.zone.zr{right:2%;top:6%;width:42%;height:86%;font-size:1.4rem}
+.zone.right{background:#2ecc71;color:#fff}.zone.bad{background:#e74c3c;color:#fff}
+.pkeeper{position:absolute;left:50%;bottom:calc(38% - 8px);height:30%;transform:translateX(-50%);transition:transform .45s;z-index:4;pointer-events:none}
+.pkeeper img{height:100%;display:block}
+.pkeeper.dl{transform:translateX(calc(-50% - 95px)) rotate(-40deg)}.pkeeper.dr{transform:translateX(calc(-50% + 95px)) rotate(40deg)}
+.pyun{position:absolute;left:8%;bottom:0;height:36%;z-index:4}
+.pball{position:absolute;width:32px;z-index:5;left:34%;bottom:5%}
+.pfb{padding:0 12px 24px}
+
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}.modes .btn{font-size:.95rem;padding:8px 6px}.modes small{display:block;font-weight:700;opacity:.9}
+.sec2{margin:12px 0 4px;font-weight:900;opacity:.8}
 </style></head><body><div id="app"></div>
 <script>/* ===== Captain Yunus — cartoon art (all SVG, drawn in code) ===== */
 const C = {
@@ -756,7 +778,7 @@ const OOPS = ['ولا يهمك، هنفتكرها المرة الجاية 💙',
 /* ---------- state ---------- */
 const KEY = 'captain-yunus-v1';
 let S;
-const defState = () => ({ v: 1, done: {}, stars: {}, cups: {}, coins: 0, mist: [], stk: {}, flags: {}, plays: 0, seen: {}, set: { sound: true, music: false, unlock: false } });
+const defState = () => ({ v: 1, done: {}, stars: {}, lm: {}, cups: {}, coins: 0, mist: [], stk: {}, flags: {}, plays: 0, seen: {}, set: { sound: true, music: false, unlock: false } });
 function load() {
   try { const r = localStorage.getItem(KEY); S = r ? Object.assign(defState(), JSON.parse(r)) : defState(); } catch (e) { S = defState(); }
   S.set = Object.assign(defState().set, S.set || {});
@@ -767,6 +789,7 @@ const RANKS = [[0, 'لاعب ناشئ'], [5, 'لاعب أساسي'], [12, 'نج�
 const rankOf = () => { const t = totalStars(); let r = RANKS[0][1]; RANKS.forEach(x => { if (t >= x[0]) r = x[1]; }); return r; };
 const unitDone = u => UBY[u].lessons.every(l => S.done[l.id]);
 const cupId = u => u;
+const lessonUnlocked = l => S.set.unlock || l.idx === 0 || !!S.done[LESSONS[l.idx - 1].id];
 const cupUnlocked = id => S.set.unlock || (id === 'grand' ? UNITS.every(u => (S.cups[u.id] || 0) >= 3) : unitDone(id));
 function addMistake(id) { if (!S.mist.includes(id)) { S.mist.push(id); if (S.mist.length > 80) S.mist.shift(); } }
 function delMistake(id) { S.mist = S.mist.filter(x => x !== id); }
@@ -971,6 +994,7 @@ const DECO = {
   stal(c, x, gy, s, col) { c.fillStyle = col; c.beginPath(); c.moveTo(x - s * .18, 0); c.lineTo(x, s); c.lineTo(x + s * .18, 0); c.fill(); },
   drop(c, x, gy, s, col) { c.fillStyle = col; c.beginPath(); c.moveTo(x, gy - s); c.quadraticCurveTo(x + s * .5, gy - s * .35, x, gy - s * .05); c.quadraticCurveTo(x - s * .5, gy - s * .35, x, gy - s); c.fill(); },
   globe(c, x, gy, s, col) { c.strokeStyle = col; c.lineWidth = 2; c.beginPath(); c.arc(x, gy - s * .6, s * .5, 0, 7); c.stroke(); c.beginPath(); c.ellipse(x, gy - s * .6, s * .2, s * .5, 0, 0, 7); c.stroke(); c.beginPath(); c.moveTo(x - s * .5, gy - s * .6); c.lineTo(x + s * .5, gy - s * .6); c.moveTo(x - s * .43, gy - s * .8); c.lineTo(x + s * .43, gy - s * .8); c.moveTo(x - s * .43, gy - s * .4); c.lineTo(x + s * .43, gy - s * .4); c.stroke(); },
+  flag(c, x, gy, s, col) { c.strokeStyle = '#eee'; c.lineWidth = 4; c.beginPath(); c.moveTo(x, gy); c.lineTo(x, gy - s * .8); c.stroke(); c.fillStyle = col; c.beginPath(); c.moveTo(x, gy - s * .8); c.lineTo(x + s * .35, gy - s * .68); c.lineTo(x, gy - s * .56); c.fill(); },
   reed(c, x, gy, s, col) { c.strokeStyle = col; c.lineWidth = 3; for (let i = -2; i <= 2; i++) { c.beginPath(); c.moveTo(x + i * 6, gy); c.quadraticCurveTo(x + i * 10, gy - s * .5, x + i * 16, gy - s * (.9 - Math.abs(i) * .1)); c.stroke(); } }
 };
 const THEMES = {
@@ -984,6 +1008,7 @@ const THEMES = {
   alex: { sky: ['#4aa8f0', '#d8f2ff'], gnd: ['#e8d29a', '#c8b073'], far: ['light', ['#e5533d']], near: ['wave', ['#2c8ed9']], farN: 2, nearN: 3, sun: 1, hurdle: 'crate' },
   mine: { sky: ['#1b1b2e', '#3a3560'], gnd: ['#4a4560', '#2c2840'], far: ['crystal', ['#7f5af0', '#2cb67d', '#ffd21f', '#4cc9f0']], near: ['stal', ['#2a2640']], farN: 6, nearN: 5, hurdle: 'rock' },
   water: { sky: ['#2b8ae0', '#bff1ff'], gnd: ['#2f9ec2', '#1e7a9c'], far: ['wave', ['#4ab8e8']], near: ['drop', ['#7fdcff']], farN: 3, nearN: 5, hurdle: 'crate' },
+  pitch: { sky: ['#3d9be9', '#d8f2ff'], gnd: ['#37a34a', '#256f33'], stripe: 1, far: ['stand', ['#fff']], near: ['flag', ['#ffd21f']], farN: 1, nearN: 4, sun: 1, hurdle: 'cone' },
   city: { sky: ['#2c5fa8', '#f4d7a3'], gnd: ['#6d7480', '#4a505b'], far: ['sky', ['#5b7a9e', '#7f9bbb']], near: ['sky', ['#31465f', '#3f5878']], farN: 6, nearN: 4, hurdle: 'cone' }
 };
 const BGC = {};
@@ -1001,6 +1026,7 @@ function makeBG(theme) {
     }
   };
   x = far.getContext('2d');
+  if (T.far[0] === 'stand') { const sy = GY - 105; x.fillStyle = '#4b5563'; x.fillRect(0, sy, GW, 105); x.fillStyle = '#374151'; x.fillRect(0, sy, GW, 8); const cc = ['#e74c3c', '#3498db', '#f1c40f', '#ecf0f1', '#2ecc71', '#e67e22']; for (let r = 0; r < 5; r++) for (let i = 0; i < 50; i++) { x.fillStyle = cc[(i * 7 + r * 3) % 6]; x.beginPath(); x.arc(8 + i * 16 + (r % 2) * 8, sy + 22 + r * 16, 5, 0, 7); x.fill(); x.fillStyle = '#e8b68d'; x.beginPath(); x.arc(8 + i * 16 + (r % 2) * 8, sy + 15 + r * 16, 3.5, 0, 7); x.fill(); } x.fillStyle = '#13265c'; x.fillRect(0, GY - 14, GW, 14); x.fillStyle = '#ffd21f'; for (let i = 0; i < 8; i++) x.fillRect(20 + i * 100, GY - 11, 60, 8); } else
   if (T.far[0] === 'globe') place(x, T.far, T.farN, 0, () => GY - 60, 70, 110); else place(x, T.far, T.farN, 0, () => GY, 90, 150);
   x = near.getContext('2d');
   if (T.near[0] === 'cloud') place(x, T.near, T.nearN, 0, (i) => 60 + (i % 3) * 40, 90, 140);
@@ -1016,7 +1042,10 @@ function makeBG(theme) {
 function tileDraw(c, layer, off) { const o = -((off % GW) + GW) % GW; c.drawImage(layer, o, 0); c.drawImage(layer, o + GW, 0); }
 
 /* ---- blockers (drawn with base at 0, up = negative) ---- */
+const DEF_COLS = ['#e63946', '#8e44ad', '#16a085', '#d35400', '#2c3e50', '#c0392b', '#2980b9'];
 const BLK = {
+  defender(c, g) { c.fillStyle = 'rgba(0,0,0,.2)'; c.beginPath(); c.ellipse(0, 0, 46, 8, 0, 0, 7); c.fill(); const im = img(artURI('keeper', g.col, '#222')); if (im.complete && im.naturalWidth) c.drawImage(im, -52, -150, 104, 143); },
+  cones(c) { [[-96, 14], [-48, -12], [0, 14], [48, -12], [96, 14]].forEach(a => { c.save(); c.translate(a[0], a[1]); c.scale(1.5 + a[1] * .01, 1.5 + a[1] * .01); c.fillStyle = '#ff7a00'; c.beginPath(); c.moveTo(-18, 0); c.lineTo(0, -44); c.lineTo(18, 0); c.fill(); c.fillStyle = '#fff'; c.fillRect(-11, -22, 22, 6); c.fillStyle = '#c85f00'; c.fillRect(-22, -4, 44, 6); c.restore(); }); },
   gate(c) { c.fillStyle = '#5a5a66'; c.fillRect(-52, -118, 12, 118); c.fillRect(40, -118, 12, 118); for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? '#fff' : '#e63946'; c.fillRect(-52 + i * 13, -104, 13, 20); } c.strokeStyle = '#222'; c.lineWidth = 3; c.strokeRect(-52, -104, 104, 20); },
   dune(c) { c.fillStyle = '#e3bd78'; c.beginPath(); c.moveTo(-90, 0); c.quadraticCurveTo(-30, -150, 0, -130); c.quadraticCurveTo(40, -110, 90, 0); c.fill(); c.strokeStyle = '#b88a3e'; c.lineWidth = 3; c.stroke(); c.strokeStyle = 'rgba(160,110,40,.5)'; for (let i = 0; i < 4; i++) { c.beginPath(); c.moveTo(-60 + i * 25, -20 - i * 6); c.quadraticCurveTo(-20 + i * 20, -50 - i * 8, 10 + i * 18, -20); c.stroke(); } },
   storm(c) { c.fillStyle = '#3a3f5c'; [[-40, -110, 36], [0, -125, 44], [42, -108, 34], [-8, -95, 40]].forEach(a => { c.beginPath(); c.arc(a[0], a[1], a[2], 0, 7); c.fill(); }); c.fillStyle = '#ffd21f'; c.beginPath(); c.moveTo(-6, -85); c.lineTo(16, -85); c.lineTo(4, -55); c.lineTo(20, -55); c.lineTo(-10, -5); c.lineTo(-2, -45); c.lineTo(-16, -45); c.fill(); c.strokeStyle = '#7fb2ff'; c.lineWidth = 3; for (let i = -3; i < 4; i++) { c.beginPath(); c.moveTo(i * 14, -70); c.lineTo(i * 14 - 6, -45); c.stroke(); } },
@@ -1037,20 +1066,21 @@ function drawHurdle(c, kind, x, gy) {
 }
 
 /* ---- the run ---- */
-function startRun(lesson, host, onExit) {
+function startRun(lesson, host, onExit, mode) {
+  mode = mode || 'run';
   const portrait = innerHeight > innerWidth * 1.15; GH = portrait ? 620 : 400; GY = GH - 65;
-  const L = lesson, T = THEMES[L.theme], bg = makeBG(L.theme);
+  const L = lesson, thm = mode === 'run' ? L.theme : 'pitch', T = THEMES[thm], bg = makeBG(thm);
   const NQ = 7;
   /* pick questions: some from mistakes first */
   const mine = shuf(L.qs.filter(q => S.mist.includes(q.id))).slice(0, 2);
   const rest = shuf(L.qs.filter(q => !mine.includes(q)));
   const qs = shuf(mine.concat(rest).slice(0, NQ));
   const G = { x: 0, y: 0, vy: 0, hearts: 5, coins: 0, lost: 0, state: 'run', t: 0, speed: 0, qi: 0, inv: 0, stumble: 0, parts: [], ball: null, over: false, shake: 0 };
-  const gates = qs.map((q, i) => ({ x: 640 + i * 800, q, t: 0, dead: false, kind: L.blocker }));
+  const gates = qs.map((q, i) => ({ x: 640 + i * 800, q, t: 0, dead: false, kind: mode === 'run' ? L.blocker : mode === 'dribble' ? 'defender' : 'cones', col: DEF_COLS[(i + L.idx) % DEF_COLS.length] }));
   const END = gates[gates.length - 1].x + 700;
   /* hurdles & coins */
   const hurdles = [], coins = [];
-  gates.forEach((g, i) => {
+  if (mode === 'run') gates.forEach((g, i) => {
     const a = (i === 0 ? 220 : gates[i - 1].x + 160), b = g.x - 220; let x = a + 60 + rnd(60);
     while (x < b - 60) { if (Math.random() < .55) hurdles.push({ x, hit: false }); x += 200 + rnd(110); }
   });
@@ -1068,17 +1098,17 @@ function startRun(lesson, host, onExit) {
     <div class="bar"><i id="rbar"></i><span id="rflag">🏁</span></div>
     <div class="coins">🪙 <b id="rc">٠</b></div>
   </div>
-  <div class="cwrap"><canvas id="cv" width="${GW}" height="${GH}" style="--ar:${GW / GH};aspect-ratio:${GW} / ${GH}"></canvas><div class="tip" id="tip">اضغط للقفز فوق العقبات 👆</div></div>
-  <div class="runbtns"><button class="btn jump" id="rj">⬆ اقفز</button></div>`;
+  <div class="cwrap"><canvas id="cv" width="${GW}" height="${GH}" style="--ar:${GW / GH};aspect-ratio:${GW} / ${GH}"></canvas><div class="tip" id="tip">${mode === 'run' ? 'اضغط للقفز فوق العقبات 👆' : 'جاوب صح وكمّل الجري ⚽'}</div></div>
+  ${mode === 'run' ? '<div class="runbtns"><button class="btn jump" id="rj">⬆ اقفز</button></div>' : `<div class="runbtns"><div class="modehint">${mode === 'dribble' ? '⚽ كل لاعب خصم في طريقك سؤال.<br>جاوب صح وهتراوغه!' : '🔶 الكونز في طريقك سؤال.<br>جاوب صح وهتعدّي من بينهم!'}</div></div>`}`;
   const cv = $('#cv', host), cx = cv.getContext('2d');
   const hud = () => { $('#rh', host).innerHTML = heartsHTML(G.hearts, 5); $('#rc', host).textContent = D(G.coins); $('#rbar', host).style.width = Math.min(100, G.x / END * 100) + '%'; };
   hud();
   let raf = 0, last = 0, qm = null, alive = true;
   setTimeout(() => { const t = $('#tip', host); if (t) t.style.opacity = 0; }, 3500);
 
-  const jump = () => { if (G.state === 'run' && G.y === 0 && !G.over) { G.vy = -640; sfx('jump'); } };
+  const jump = () => { if (mode === 'run' && G.state === 'run' && G.y === 0 && !G.over) { G.vy = -640; sfx('jump'); } };
   cv.addEventListener('pointerdown', e => { e.preventDefault(); jump(); });
-  $('#rj', host).addEventListener('pointerdown', e => { e.preventDefault(); jump(); });
+  if ($('#rj', host)) $('#rj', host).addEventListener('pointerdown', e => { e.preventDefault(); jump(); });
   const key = e => { if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump(); } };
   addEventListener('keydown', key);
   const stop = () => { alive = false; cancelAnimationFrame(raf); removeEventListener('keydown', key); if (qm) qm.close(); };
@@ -1097,8 +1127,12 @@ function startRun(lesson, host, onExit) {
         G.hearts--; G.lost++; G.shake = .4; hud(); const hh = $('.hh', qm); if (hh) hh.innerHTML = heartsHTML(G.hearts, 5);
         if (G.hearts <= 0) { setTimeout(() => lose(), 500); return true; } return false;
       },
-      onDone(ok) { qm.close(); qm = null; smash(g); }
+      onDone(ok) { qm.close(); qm = null; if (mode === 'run') smash(g); else dodge(g); }
     });
+  }
+  function dodge(g) {
+    G.state = 'dodge'; G.qi++; G.dT = 0; G.dx0 = G.x; G.dx1 = g.x + (mode === 'cones' ? 175 : 150); G.dDur = mode === 'cones' ? 1.8 : 1.1; G.dz = 0; g.t = .001;
+    sfx(mode === 'cones' ? 'coin' : 'jump'); if (mode === 'dribble') { setTimeout(() => { sfx('smash'); }, 300); burst(g.x, 60, 14, ['#fff', '#e8b68d']); }
   }
   async function smash(g) {
     G.state = 'kick'; G.qi++;
@@ -1110,31 +1144,14 @@ function startRun(lesson, host, onExit) {
     g.dead = true; G.state = 'run'; hud();
     if (G.qi >= gates.length) G.state = 'run';
   }
-  function lose() {
-    if (G.over) return; G.over = true; stop();
-    const m = modal(`<div class="end"><div class="endav">${art('yunus', 'sad')}</div><h2>خلصت القلوب 💔</h2><p>مش مشكلة يا كابتن! الأبطال بيجرّبوا تاني. راجع الدرس وارجع أقوى.</p><div class="row"><button class="btn go" id="e1">🔁 حاول تاني</button><button class="btn" id="e2">📖 راجع الدرس</button><button class="btn" id="e3">🗺️ الخريطة</button></div></div>`);
-    $('#e1', m).onclick = () => { m.close(); onExit('retry'); }; $('#e2', m).onclick = () => { m.close(); onExit('cards'); }; $('#e3', m).onclick = () => { m.close(); onExit('map'); };
-    sfx('bad');
-  }
-  function win() {
-    if (G.over) return; G.over = true; stop();
-    const st = G.lost <= 1 ? 3 : G.lost <= 3 ? 2 : 1;
-    const gain = Math.max(0, G.coins) + st * 5;
-    const first = !S.done[L.id];
-    S.done[L.id] = 1; S.stars[L.id] = Math.max(S.stars[L.id] || 0, st); S.coins += gain; S.plays++; save(); checkStickers();
-    sfx('win'); confetti();
-    const m = modal(`<div class="end"><div class="endav">${art('yunus', 'cheer')}</div><h2>${st === 3 ? 'ماشاء الله! مرحلة خرافية' : 'عدّيت المرحلة!'} 🎉</h2><div class="starsbig">${starsHTML(st)}</div>
-      <p>🪙 كسبت <b>${D(gain)}</b> عملة${first ? ' — وفتحت علامة جديدة على الخريطة' : ''}</p>
-      ${st < 3 ? '<p class="sm">جرّب تاني من غير ما تغلط أكتر من مرة عشان تاخد ٣ نجوم ⭐⭐⭐</p>' : ''}
-      <div class="row"><button class="btn go" id="e1">${nextTarget(L) ? 'المرحلة الجاية ◀' : 'الخريطة'}</button><button class="btn" id="e2">🔁 العب تاني</button><button class="btn" id="e3">🗺️ الخريطة</button></div></div>`);
-    $('#e1', m).onclick = () => { m.close(); onExit(nextTarget(L) ? 'next' : 'map'); }; $('#e2', m).onclick = () => { m.close(); onExit('retry'); }; $('#e3', m).onclick = () => { m.close(); onExit('map'); };
-  }
+  function lose() { if (G.over) return; G.over = true; stop(); showLose(onExit); }
+  function win() { if (G.over) return; G.over = true; stop(); showWin(L, G.lost, G.coins, onExit); }
 
   function update(dt) {
     G.t += dt;
     if (G.shake > 0) G.shake -= dt;
     /* physics */
-    if (G.y > 0 || G.vy < 0) { G.vy += 1750 * dt; G.y -= G.vy * dt; if (G.y <= 0) { G.y = 0; G.vy = 0; } }
+    if (G.state !== 'dodge' && (G.y > 0 || G.vy < 0)) { G.vy += 1750 * dt; G.y -= G.vy * dt; if (G.y <= 0) { G.y = 0; G.vy = 0; } }
     if (G.inv > 0) G.inv -= dt;
     const nextGate = gates.find(g => !g.dead && (g.t === 0));
     let target = 270;
@@ -1145,6 +1162,12 @@ function startRun(lesson, host, onExit) {
     } else target = 0;
     G.speed += (Math.min(target, 270) - G.speed) * Math.min(1, dt * 7);
     if (G.state === 'run' || G.state === 'ask' || G.state === 'kick') G.x += G.speed * dt;
+    if (G.state === 'dodge') {
+      G.dT += dt; const f = Math.min(1, G.dT / G.dDur), e = f < .5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2; G.x = G.dx0 + (G.dx1 - G.dx0) * e;
+      if (mode === 'cones') { G.y = Math.abs(Math.sin(f * Math.PI * 5)) * 10; G.dz = Math.sin(f * Math.PI * 5) * 14 * Math.sin(f * Math.PI); } else { G.y = Math.sin(f * Math.PI) * 85; G.dz = 0; }
+      G.speed = 120 + 150 * Math.sin(Math.PI * f);
+      if (f >= 1) { const dg = gates[G.qi - 1]; G.state = 'run'; G.y = 0; G.dz = 0; G.speed = 200; if (dg && dg.kind !== 'cones') dg.dead = true; hud(); }
+    }
     if (G.state === 'run' && nextGate && nextGate.x - 130 - G.x < 2 && G.speed < 40 && G.y === 0) { G.state = 'stopping'; G.x = Math.max(G.x, nextGate.x - 132); setTimeout(() => { if (alive && !G.over) openQ(nextGate); }, 350); }
     /* gates fading */
     gates.forEach(g => { if (g.t > 0 && !g.dead) g.t = Math.min(1, g.t + dt * 1.6); });
@@ -1179,15 +1202,15 @@ function startRun(lesson, host, onExit) {
     gates.forEach(g => {
       if (g.dead) return; const x = sx(g.x); if (x < -140 || x > GW + 140) return;
       cx.save(); cx.translate(x, GY + 4); cx.scale(1.15, 1.15);
-      if (g.t > 0) { cx.globalAlpha = 1 - g.t; cx.rotate(g.t * .5); cx.translate(g.t * 50, -g.t * 70); cx.scale(1 + g.t * .3, 1 + g.t * .3); }
-      BLK[g.kind](cx);
-      if (g.t === 0) { const by = -170 + Math.sin(G.t * 4) * 5; cx.fillStyle = '#ffd21f'; cx.strokeStyle = '#13265c'; cx.lineWidth = 4; cx.beginPath(); cx.arc(0, by, 20, 0, 7); cx.fill(); cx.stroke(); cx.fillStyle = '#13265c'; cx.font = 'bold 28px Cairo, sans-serif'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText('؟', 0, by + 2); }
+      if (g.t > 0 && g.kind !== 'cones') { cx.globalAlpha = 1 - g.t; cx.rotate(g.t * .5); cx.translate(g.t * 50, -g.t * 70); cx.scale(1 + g.t * .3, 1 + g.t * .3); }
+      BLK[g.kind](cx, g);
+      if (g.t === 0) { const by = (g.kind === 'cones' ? -100 : -170) + Math.sin(G.t * 4) * 5; cx.fillStyle = '#ffd21f'; cx.strokeStyle = '#13265c'; cx.lineWidth = 4; cx.beginPath(); cx.arc(0, by, 20, 0, 7); cx.fill(); cx.stroke(); cx.fillStyle = '#13265c'; cx.font = 'bold 28px Cairo, sans-serif'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText('؟', 0, by + 2); }
       cx.restore();
     });
     /* player */
     let pn = 'run1';
-    if (G.over && G.hearts > 0) pn = 'cheer'; else if (G.state === 'ask' || G.state === 'stopping') pn = 'think'; else if (G.state === 'kick') pn = 'kick'; else if (G.y > 0) pn = 'jump'; else if (G.inv > .55) pn = 'hurt'; else if (G.speed < 25) pn = 'stand'; else pn = (Math.floor(G.t * 9) % 2) ? 'run1' : 'run2';
-    const im = pose(pn); const pw = 104, ph = pw * 292 / 220; const py = GY + 8 - G.y;
+    if (G.over && G.hearts > 0) pn = 'cheer'; else if (G.state === 'ask' || G.state === 'stopping') pn = 'think'; else if (G.state === 'kick') pn = 'kick'; else if (G.y > (mode === 'cones' ? 99 : 0)) pn = 'jump'; else if (G.inv > .55) pn = 'hurt'; else if (G.speed < 25) pn = 'stand'; else pn = (Math.floor(G.t * 9) % 2) ? 'run1' : 'run2';
+    const im = mode === 'run' ? pose(pn) : img(artURI('yunus', pn, { ball: true })); const pw = 104, ph = pw * 292 / 220; const py = GY + 8 - G.y + (G.dz || 0);
     cx.save(); if (G.inv > 0 && G.inv < .9 && Math.floor(G.t * 20) % 2) cx.globalAlpha = .5;
     if (im.complete && im.naturalWidth) cx.drawImage(im, sx(G.x) - pw / 2, py - ph, pw, ph); cx.restore();
     /* ball */
@@ -1210,6 +1233,83 @@ function showCards(L, after) {
   $('#cnext', m).onclick = () => { sfx('click'); if (i < L.cards.length - 1) { i++; upd(); } else m.close(); };
   $('#cclose', m).onclick = () => m.close();
   upd();
+}
+
+function showLose(onExit) {
+  const m = modal(`<div class="end"><div class="endav">${art('yunus', 'sad')}</div><h2>خلصت القلوب 💔</h2><p>مش مشكلة يا كابتن! الأبطال بيجرّبوا تاني. راجع الدرس وارجع أقوى.</p><div class="row"><button class="btn go" id="e1">🔁 حاول تاني</button><button class="btn" id="e2">📖 راجع الدرس</button><button class="btn" id="e3">🗺️ الخريطة</button></div></div>`);
+  $('#e1', m).onclick = () => { m.close(); onExit('retry'); }; $('#e2', m).onclick = () => { m.close(); onExit('cards'); }; $('#e3', m).onclick = () => { m.close(); onExit('map'); };
+  sfx('bad');
+}
+function showWin(L, lost, coins, onExit) {
+  const st = lost <= 1 ? 3 : lost <= 3 ? 2 : 1, gain = Math.max(0, coins) + st * 5, first = !S.done[L.id], nx = nextTarget(L);
+  S.done[L.id] = 1; S.stars[L.id] = Math.max(S.stars[L.id] || 0, st); S.coins += gain; S.plays++; save(); checkStickers();
+  sfx('win'); confetti();
+  const m = modal(`<div class="end"><div class="endav">${art('yunus', 'cheer')}</div><h2>${st === 3 ? 'ماشاء الله! مرحلة خرافية' : 'عدّيت المرحلة!'} 🎉</h2><div class="starsbig">${starsHTML(st)}</div>
+    <p>🪙 كسبت <b>${D(gain)}</b> عملة${first && nx ? ' — واتفتح الدرس اللي بعده 🔓' : ''}</p>
+    ${st < 3 ? '<p class="sm">جرّب تاني من غير ما تغلط أكتر من مرة عشان تاخد ٣ نجوم ⭐⭐⭐</p>' : ''}
+    <div class="row"><button class="btn go" id="e1">${nx ? 'الدرس الجاي ◀' : 'الخريطة'}</button><button class="btn" id="e2">🔁 العب تاني</button><button class="btn" id="e3">🗺️ الخريطة</button></div></div>`);
+  $('#e1', m).onclick = () => { m.close(); onExit(nx ? 'next' : 'map'); }; $('#e2', m).onclick = () => { m.close(); onExit('retry'); }; $('#e3', m).onclick = () => { m.close(); onExit('map'); };
+}
+
+/* ===== Penalty shootout mode: answers sit in the goal corners ===== */
+function startPen(L, host, onExit) {
+  const pool = shuf(L.qs.filter(q => q.t === 'mc' || q.t === 'tf'));
+  const mine = pool.filter(q => S.mist.includes(q.id)).slice(0, 2);
+  const qs = shuf(mine.concat(pool.filter(q => !mine.includes(q))).slice(0, 7));
+  let hearts = 5, lost = 0, i = 0, alive = true, busy = false, goals = 0;
+  host.innerHTML = `
+  <div class="runtop"><button class="btn-ico" id="px">✖</button><div class="hearts" id="ph"></div><div class="bar"><i id="pbar"></i><span>🏁</span></div><div class="coins">⚽ <b id="pg">٠</b></div></div>
+  <div class="penq"><button class="spk" id="psp">🔊</button><div id="pq"></div></div>
+  <div class="pen" id="pen"><div class="pgoal"><div class="net"></div><div class="zones" id="pz"></div></div><div class="pkeeper" id="pk"></div><img class="pyun" id="py"><img class="pball" id="pb" src="${artURI('ball', 20)}"></div>
+  <div class="qfb pfb" id="pfb"></div>`;
+  const P = id => $('#' + id, host), pen = P('pen'), pb = P('pb'), py = P('py'), pk = P('pk');
+  const hud = () => { P('ph').innerHTML = heartsHTML(hearts, 5); P('pbar').style.width = (i / qs.length * 100) + '%'; P('pg').textContent = D(goals); };
+  const keeper = () => { pk.innerHTML = `<img src="${artURI('keeper', '#2f80ed', '#13265c', null, null, 'save')}">`; };
+  const ballReset = () => { pb.style.transition = 'none'; pb.style.left = '34%'; pb.style.bottom = '5%'; };
+  const setY = p => { py.src = artURI('yunus', p); };
+  let cur = null, dead = false;
+  P('px').onclick = async () => { if (await ask('تخرج من المرحلة؟<br><small>التقدم مش هيتحفظ</small>', 'اخرج', 'كمّل')) { alive = false; onExit('exit'); } };
+  P('psp').onclick = () => { sfx('click'); if (cur) say(cur.q); };
+
+  function next() {
+    if (!alive) return;
+    if (i >= qs.length) { alive = false; return showWin(L, lost, 12 - lost * 2, onExit); }
+    const q = qs[i]; cur = q; busy = false; hud();
+    P('pfb').innerHTML = ''; setY('stand'); ballReset(); pk.className = 'pkeeper'; keeper();
+    P('pq').innerHTML = D(esc(q.q)).replace(/\.{6}/g, '<span class="blank">؟؟؟</span>');
+    const z = P('pz'); z.innerHTML = '';
+    let opts;
+    if (q.t === 'mc') opts = shuf([q.ok, ...q.bad]).map((t, k) => ({ t, ok: t === q.ok, cls: 'z' + (k + 1) }));
+    else opts = shuf([{ t: '✅ صح', ok: q.v === true }, { t: '❌ غلط', ok: q.v === false }]).map((o, k) => Object.assign(o, { cls: k ? 'zr' : 'zl' }));
+    opts.forEach(o => {
+      const b = el('button', 'zone ' + o.cls, D(esc(o.t))); z.appendChild(b);
+      b.onclick = () => shoot(b, o, opts);
+    });
+  }
+  async function shoot(b, o, all) {
+    if (busy || !alive || b.disabled) return; busy = true;
+    const zr = b.getBoundingClientRect(), pr = pen.getBoundingClientRect();
+    const left = zr.left + zr.width / 2 - pr.left - 16, bottom = pr.bottom - (zr.top + zr.height / 2) - 16;
+    const rightSide = (zr.left + zr.width / 2) > (pr.left + pr.width / 2);
+    setY('kick'); sfx('kick'); await sleep(220);
+    pb.style.transition = 'left .45s ease-out, bottom .45s ease-out'; pb.style.left = left + 'px'; pb.style.bottom = bottom + 'px';
+    if (o.ok) {
+      pk.classList.add(rightSide ? 'dl' : 'dr');
+      await sleep(480); if (!alive) return; sfx('goal'); goals++; i++; b.classList.add('right'); setY('cheer'); hud();
+      all.forEach(x => { }); P('pz').querySelectorAll('button').forEach(x => x.disabled = true);
+      P('pfb').innerHTML = `<div class="why good"><b>جـــــوووول! ⚽ ${PRAISE[rnd(PRAISE.length)]}</b><br>💡 ${D(esc(cur.why || ''))}</div>`;
+      const nb = el('button', 'btn go', 'كمّل ◀'); nb.onclick = () => { sfx('click'); next(); }; P('pfb').appendChild(nb);
+    } else {
+      pk.classList.add(rightSide ? 'dr' : 'dl');
+      await sleep(480); if (!alive) return; b.classList.add('bad'); b.disabled = true; sfx('bad'); setY('sad'); addMistake(cur.id);
+      hearts--; lost++; hud();
+      P('pfb').innerHTML = '<div class="hint">الحارس صدّها! 🧤 جرّب زاوية تانية</div>';
+      if (hearts <= 0) { alive = false; await sleep(700); return showLose(onExit); }
+      await sleep(900); if (!alive) return; setY('stand'); pk.className = 'pkeeper'; ballReset(); busy = false;
+    }
+  }
+  next();
+  return { stop() { alive = false; } };
 }
 
 /* ===== Cup matches + arcade games ===== */
@@ -1364,12 +1464,14 @@ function go(name, arg, noPush) {
   if (CLEAN) { try { CLEAN(); } catch (e) { } CLEAN = null; }
   document.querySelectorAll('.qmodal').forEach(m => m.remove());
   window.scrollTo(0, 0); APP.className = 'screen s-' + name; APP.innerHTML = '';
-  SCREENS[name](arg);
   CUR = [name, arg];
+  SCREENS[name](arg);
 }
 let CUR = ['home'];
 const bar = (title, back) => `<div class="topbar"><button class="btn-ico" id="bk">▶</button><h1>${title}</h1><div class="coins">🪙 <b>${D(S.coins)}</b></div></div>`;
 const wireBack = to => { const b = $('#bk'); if (b) b.onclick = () => { sfx('click'); go(to || 'home'); }; };
+const MODES = [['run', '🏃', 'جري العقبات'], ['pen', '🥅', 'ضربات جزاء'], ['dribble', '⚽', 'مراوغة اللاعبين'], ['cones', '🔶', 'تمرين الكونز']];
+const PARENT = { map: 'home', lesson: 'map', cups: 'home', cupmenu: a => a === 'grand' ? 'cups' : 'map', arcade: 'home', trophies: 'home', parent: 'home', mem: 'arcade', speed: 'arcade', mist: 'home', run: 'map', match: 'cups' };
 const GREET = ['يلا يا كابتن!', 'النهارده هنكسب الكأس! 🏆', 'جاهز للمغامرة؟', 'يلا نجمع النجوم ⭐', 'التركيز يا بطل! ⚽'];
 
 const SCREENS = {
@@ -1411,9 +1513,9 @@ const SCREENS = {
       sec.innerHTML = `<div class="uh"><span class="ui">${u.icon}</span><div><small>الوحدة ${D(ui + 1)}</small><h2>${D(esc(u.title))}</h2></div></div>`;
       const path = el('div', 'path');
       u.lessons.forEach((l, i) => {
-        const s = S.stars[l.id] || 0, n = el('button', 'node' + (S.done[l.id] ? ' done' : ''));
-        n.innerHTML = `<span class="ni">${l.icon}</span><span class="nt"><b>${D(esc(l.title))}</b><span class="stars">${starsHTML(s)}</span></span><span class="go">◀</span>`;
-        n.onclick = () => { sfx('click'); go('lesson', l.id); };
+        const s = S.stars[l.id] || 0, lk = !lessonUnlocked(l), n = el('button', 'node' + (S.done[l.id] ? ' done' : '') + (lk ? ' locked' : ''));
+        n.innerHTML = `<span class="ni">${lk ? '🔒' : l.icon}</span><span class="nt"><b>${D(esc(l.title))}</b>${lk ? '<small>خلّص الدرس اللي قبله الأول</small>' : `<span class="stars">${starsHTML(s)}</span>`}</span><span class="go">◀</span>`;
+        n.onclick = () => { if (lk) { sfx('bad'); toast('لازم تخلّص «' + LESSONS[l.idx - 1].title + '» الأول 🔒', 2800); return; } sfx('click'); go('lesson', l.id); };
         path.appendChild(n);
       });
       const cu = cupUnlocked(u.id), won = (S.cups[u.id] || 0) >= 3;
@@ -1431,25 +1533,34 @@ const SCREENS = {
 
   lesson(id) {
     const l = LBY[id], u = UBY[l.unit];
+    if (!lessonUnlocked(l)) { go('map'); return; }
+    const last = S.lm[id], rec = last === undefined ? l.idx % MODES.length : (last + 1) % MODES.length, M = MODES[rec];
     APP.innerHTML = bar('') + `<div class="lesson" style="--uc:${u.color}">
       <div class="lbig">${l.icon}</div><h2>${D(esc(l.title))}</h2><p class="intro">${D(esc(l.intro))}</p>
       <div class="starsbig">${starsHTML(S.stars[id] || 0)}</div>
       <button class="btn blue huge" id="l1">📖 درس سريع (${D(l.cards.length)} كروت)</button>
-      <button class="btn go huge" id="l2">🏃 ابدأ الجري</button>
-      <p class="sm">هتقابل ${D(7)} عقبات. كل عقبة بتتفتح بإجابة صح. عندك ${D(5)} قلوب ❤ — وخد بالك من العقبات الصغيرة اللي بتتنطط!</p></div>`;
+      <button class="btn go huge" id="l2">▶ ابدأ: ${M[1]} ${M[2]}</button>
+      <div class="sec2">أو اختار أسلوب لعب تاني:</div>
+      <div class="modes">${MODES.map((m, k) => `<button class="btn ${k === rec ? 'go' : ''}" data-m="${k}">${m[1]}<small>${m[2]}</small></button>`).join('')}</div>
+      <p class="sm">${D(7)} تحديات في كل لعبة، وعندك ${D(5)} قلوب ❤ — كل غلطة بتخسّرك قلب. خلّص مرحلة بأي أسلوب والدرس اللي بعده يتفتح.</p></div>`;
     wireBack('map');
+    const play = k => { S.lm[id] = k; save(); sfx('click'); go('run', { id, mode: MODES[k][0] }); };
     $('#l1').onclick = () => { sfx('click'); showCards(l); };
-    $('#l2').onclick = () => { sfx('click'); go('run', id); };
+    $('#l2').onclick = () => play(rec);
+    APP.querySelectorAll('.modes .btn').forEach(b => b.onclick = () => play(+b.dataset.m));
   },
 
-  run(id) {
-    const l = LBY[id]; APP.innerHTML = '<div class="run" id="rh"></div>';
-    const r = startRun(l, $('#rh'), act => {
-      if (act === 'retry') go('run', id);
+  run(arg) {
+    const id = typeof arg === 'string' ? arg : arg.id, mode = (arg && arg.mode) || 'run', l = LBY[id];
+    if (!lessonUnlocked(l)) { go('map'); return; }
+    APP.innerHTML = '<div class="run" id="rh"></div>';
+    const cb = act => {
+      if (act === 'retry') go('run', { id, mode });
       else if (act === 'next') go('lesson', nextTarget(l).id);
       else if (act === 'cards') { go('lesson', id); setTimeout(() => showCards(l), 200); }
-      else go('map');
-    });
+      else go(act === 'exit' ? 'lesson' : 'map', act === 'exit' ? id : undefined);
+    };
+    const r = mode === 'pen' ? startPen(l, $('#rh'), cb) : startRun(l, $('#rh'), cb, mode);
     CLEAN = r.stop;
   },
 
@@ -1520,7 +1631,7 @@ const SCREENS = {
       <h3>الإعدادات</h3>
       <label class="tg"><input type="checkbox" id="p1" ${S.set.sound ? 'checked' : ''}> المؤثرات الصوتية</label>
       <label class="tg"><input type="checkbox" id="p2" ${S.set.music ? 'checked' : ''}> الموسيقى</label>
-      <label class="tg"><input type="checkbox" id="p3" ${S.set.unlock ? 'checked' : ''}> فتح كل الكؤوس (بدون شرط إنهاء الدروس)</label>
+      <label class="tg"><input type="checkbox" id="p3" ${S.set.unlock ? 'checked' : ''}> فتح كل الدروس والكؤوس (بدون شرط الترتيب)</label>
       <h3>حفظ التقدم / نقله لجهاز تاني</h3>
       <p class="sm">انسخ الكود ده واحتفظ بيه. على جهاز تاني الصقه في الخانة واضغط «استرجاع».</p>
       <textarea id="pc" readonly>${code}</textarea><button class="btn sm" id="p4">📋 نسخ الكود</button>
@@ -1538,16 +1649,29 @@ const SCREENS = {
 
 function help() {
   const m = modal(`<div class="end"><div class="endav">${art('yunus', 'wave')}</div><h2>إزاي ألعب؟</h2>
-    <ol class="how"><li>اختار درس من الخريطة، واقرأ الدرس السريع.</li><li>ابدأ الجري! اضغط على الشاشة أو الزرار عشان تقفز فوق العقبات الصغيرة وتجمع العملات 🪙</li><li>لما توصل لعقبة كبيرة، جاوب على السؤال وهتتكسر بكورة ⚽</li><li>كل غلطة بتخسّرك قلب ❤ (عندك ٥).</li><li>خلّص دروس الوحدة وابدأ الكأس: كل إجابة صح = هدف! اكسب الماتشات لحد النهائي 🏆</li><li>📲 لتثبيتها على التليفون: من قائمة كروم ⋮ اختار «تثبيت التطبيق».</li></ol>
+    <ol class="how"><li>اختار درس من الخريطة، واقرأ الدرس السريع.</li><li>اختار أسلوب اللعب: 🏃 جري العقبات (اضغط عشان تقفز وتجمع العملات 🪙) أو 🥅 ضربات جزاء (اشوط على الزاوية الصح) أو ⚽ مراوغة لاعبين أو 🔶 كونز. في كل أسلوب كل عقبة سؤال، جاوب صح وعدّيها!</li><li>كل غلطة بتخسّرك قلب ❤ (عندك ٥).</li><li>خلّص دروس الوحدة وابدأ الكأس: كل إجابة صح = هدف! اكسب الماتشات لحد النهائي 🏆</li><li>📲 لتثبيتها على التليفون: من قائمة كروم ⋮ اختار «تثبيت التطبيق».</li></ol>
     <button class="btn go" id="hx">يلا بينا!</button></div>`); $('#hx', m).onclick = () => m.close();
 }
 
+function initBack() {
+  try { history.replaceState({ a: 0 }, ''); history.pushState({ a: 1 }, ''); } catch (e) { return; }
+  let last = 0; const guard = () => { try { history.pushState({ a: 1 }, ''); } catch (_) { } };
+  addEventListener('popstate', () => {
+    const ms = [...document.querySelectorAll('.qmodal')], top = ms[ms.length - 1];
+    if (top) { guard(); if (top.classList.contains('run') || top.querySelector('.end')) return; const no = $('#cn', top); if (no) no.click(); else if (top.close) top.close(); return; }
+    const sc = CUR[0], x = $('.runtop .btn-ico');
+    if (['run', 'match', 'mem', 'speed', 'mist'].includes(sc) && x) { guard(); x.click(); return; }
+    if (sc === 'home') { if (Date.now() - last < 2200) { history.back(); return; } last = Date.now(); toast('اضغط رجوع مرة تانية للخروج من اللعبة', 1800); guard(); return; }
+    guard(); const P = PARENT[sc]; go(typeof P === 'function' ? P(CUR[1]) : (P || 'home'));
+  });
+}
 function init() {
   load(); APP = $('#app'); music();
   document.addEventListener('pointerdown', () => ac(), { once: true });
   document.addEventListener('visibilitychange', () => { if (document.hidden) { try { speechSynthesis.cancel(); } catch (e) { } } });
   document.addEventListener('contextmenu', e => e.preventDefault());
   if ('serviceWorker' in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register('./sw.js').catch(() => { });
+  initBack();
   go('home');
 }
 document.addEventListener('DOMContentLoaded', init);
