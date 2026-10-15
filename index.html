@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#13265c"><title>كابتن يونس ⚽ الدراسات الاجتماعية</title>
+<meta name="theme-color" content="#13265c"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="كابتن يونس"><title>كابتن يونس ⚽ الدراسات الاجتماعية</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;900&display=swap" rel="stylesheet">
 <style>:root{--y:#ffd21f;--yd:#d6a900;--n:#13265c;--nd:#0b1738;--g:#2ecc71;--gd:#1e9c52;--b:#2f80ed;--bd:#1f5bb5;--r:#e74c3c;--rd:#b0372b;--bg:#eaf3ff;--card:#fff;--tx:#10224f}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;background:var(--n);color:var(--tx);font-family:'Cairo','Baloo Bhaijaan 2',Tahoma,sans-serif;direction:rtl;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+html,body{overscroll-behavior:none;-webkit-touch-callout:none;margin:0;min-height:100%;background:var(--n);color:var(--tx);font-family:'Cairo','Baloo Bhaijaan 2',Tahoma,sans-serif;direction:rtl;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 body{background:linear-gradient(#13265c,#1d3a86);min-height:100dvh}
-#app{max-width:760px;margin:0 auto;min-height:100dvh;background:var(--bg);position:relative;overflow-x:hidden}
+#app{padding:env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);max-width:760px;margin:0 auto;min-height:100dvh;background:var(--bg);position:relative;overflow-x:hidden}
 button{font-family:inherit;cursor:pointer;color:inherit}
 .btn{background:var(--y);color:var(--n);border:0;border-bottom:6px solid var(--yd);border-radius:18px;padding:10px 18px;font-size:1.05rem;font-weight:900;transition:transform .08s}
 .btn:active{transform:translateY(4px);border-bottom-width:2px}
@@ -32,11 +32,11 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .chip.rank{background:var(--y)}
 .logo{text-align:center;margin-top:8px;line-height:1}
 .logo .l1{font-size:2rem;font-weight:900;color:var(--n)}
-.logo .l2{font-size:4.2rem;font-weight:900;color:var(--n);-webkit-text-stroke:0;text-shadow:0 5px 0 var(--y),0 8px 0 rgba(0,0,0,.2)}
+.logo .l2{font-size:min(4.2rem,9dvh);font-weight:900;color:var(--n);-webkit-text-stroke:0;text-shadow:0 5px 0 var(--y),0 8px 0 rgba(0,0,0,.2)}
 .logo .l3{font-size:.8rem;font-weight:700;margin-top:6px;opacity:.8}
 .herobox{position:relative;text-align:center;margin:4px 0}
 .hero-art svg{width:100%;height:auto;max-height:290px;display:block;margin:auto;filter:drop-shadow(0 6px 4px rgba(0,0,0,.2))}
-.hero-art.big{max-width:220px;margin:0 auto}
+.hero-art.big{max-width:min(220px,27dvh);margin:0 auto}
 .bubble{position:absolute;right:6%;top:4%;background:#fff;border:3px solid var(--n);border-radius:20px;padding:6px 12px;font-weight:900;max-width:46%;font-size:.95rem;cursor:pointer;animation:bob 2.4s ease-in-out infinite}
 .bubble::after{content:"";position:absolute;bottom:-12px;left:20px;border:8px solid transparent;border-top-color:var(--n)}
 @keyframes bob{50%{transform:translateY(-6px)}}
@@ -71,10 +71,10 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .bar i{display:block;height:100%;background:var(--y);border-radius:10px;width:0;transition:width .1s}
 .bar span{position:absolute;left:-4px;top:-8px;font-size:1.3rem}
 .cwrap{position:relative;background:#000;display:flex;justify-content:center}
-#cv{width:min(100%,calc((100dvh - 190px)*2));max-width:100%;aspect-ratio:2/1;display:block;touch-action:none;background:#87ceeb}
+#cv{width:min(100%,calc((100dvh - 190px)*var(--ar,2)));max-width:100%;display:block;touch-action:none;background:#87ceeb}
 .tip{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;border-radius:14px;padding:4px 14px;font-weight:700;transition:opacity 1s;pointer-events:none;white-space:nowrap}
-.runbtns{padding:12px 16px;display:flex;justify-content:center}
-.btn.jump{width:100%;max-width:420px;font-size:1.6rem;padding:16px;background:var(--b);border-bottom-color:var(--bd);color:#fff;touch-action:none}
+.runbtns{flex:1;padding:12px 16px calc(18px + env(safe-area-inset-bottom));display:flex;justify-content:center}
+.btn.jump{width:100%;max-width:520px;height:100%;min-height:90px;max-height:240px;font-size:1.8rem;padding:16px;background:var(--b);border-bottom-color:var(--bd);color:#fff;touch-action:none}
 /* modal */
 .qmodal{position:fixed;inset:0;background:rgba(10,20,50,.72);display:flex;align-items:center;justify-content:center;padding:12px;z-index:50;opacity:0;transition:opacity .2s;overflow:auto}
 .qmodal.on{opacity:1}
@@ -154,7 +154,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .tg{display:block;font-weight:700;margin:6px 0}.tg input{width:20px;height:20px;vertical-align:middle;margin-left:8px}
 .toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-80px);background:var(--n);color:#fff;border:3px solid var(--y);border-radius:20px;padding:8px 18px;font-weight:900;z-index:100;transition:transform .35s;max-width:92vw;text-align:center}.toast.show{transform:translate(-50%,0)}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:90}
-@media (max-height:460px) and (orientation:landscape){#cv{width:min(100%,calc((100dvh - 120px)*2))}.runbtns{padding:6px}.btn.jump{padding:8px;font-size:1.1rem}.logo .l2{font-size:2.8rem}}
+@media (max-height:460px) and (orientation:landscape){#cv{width:min(100%,calc((100dvh - 120px)*2))}.runbtns{padding:6px;flex:none}.btn.jump{padding:8px;font-size:1.1rem;height:auto;min-height:0}.logo .l2{font-size:2.8rem}}
 </style></head><body><div id="app"></div>
 <script>/* ===== Captain Yunus — cartoon art (all SVG, drawn in code) ===== */
 const C = {
@@ -948,7 +948,7 @@ function renderQ(host, q, o) {
 }
 
 /* ===== Runner engine ===== */
-const GW = 800, GH = 400, GY = 335;
+const GW = 800; let GH = 400, GY = 335;
 const IMGS = {};
 function img(url) { if (!IMGS[url]) { const i = new Image(); i.src = url; IMGS[url] = i; } return IMGS[url]; }
 const pose = n => img(artURI('yunus', n));
@@ -988,11 +988,11 @@ const THEMES = {
 };
 const BGC = {};
 function makeBG(theme) {
-  if (BGC[theme]) return BGC[theme];
+  const ck = theme + GH; if (BGC[ck]) return BGC[ck];
   const T = THEMES[theme], mk = () => { const c = document.createElement('canvas'); c.width = GW; c.height = GH; return c; };
   const sky = mk(), far = mk(), near = mk();
   let x = sky.getContext('2d'), g = x.createLinearGradient(0, 0, 0, GY); g.addColorStop(0, T.sky[0]); g.addColorStop(1, T.sky[1]); x.fillStyle = g; x.fillRect(0, 0, GW, GH);
-  if (T.stars) { x.fillStyle = '#fff'; for (let i = 0; i < 50; i++) { x.globalAlpha = Math.random() * .8 + .2; x.fillRect(Math.random() * GW, Math.random() * 200, 2, 2); } x.globalAlpha = 1; }
+  if (T.stars) { x.fillStyle = '#fff'; for (let i = 0; i < 50; i++) { x.globalAlpha = Math.random() * .8 + .2; x.fillRect(Math.random() * GW, Math.random() * (GY - 120), 2, 2); } x.globalAlpha = 1; }
   if (T.sun) { const sg = x.createRadialGradient(650, 80, 5, 650, 80, 70); sg.addColorStop(0, '#fff7c2'); sg.addColorStop(.4, 'rgba(255,230,120,.8)'); sg.addColorStop(1, 'rgba(255,230,120,0)'); x.fillStyle = sg; x.fillRect(560, 0, 200, 170); }
   const place = (ctx, spec, n, hs, ypos, sMin, sMax) => {
     for (let i = 0; i < n; i++) {
@@ -1009,9 +1009,9 @@ function makeBG(theme) {
   else if (T.near[0] === 'wave') place(x, T.near, T.nearN, 0, () => GY + 6, 200, 260);
   else place(x, T.near, T.nearN, 0, () => GY, 70, 120);
   if (T.far[0] !== 'cloud' && theme !== 'grid' && theme !== 'mine' && theme !== 'stone') { // clouds in the sky
-    const cx = far.getContext('2d'); for (let i = 0; i < 3; i++) for (const dx of [-GW, 0, GW]) DECO.cloud(cx, 120 + i * 270 + dx, 55 + (i % 2) * 40, 90);
+    const cx = far.getContext('2d'); const rows = Math.max(1, Math.floor((GY - 200) / 110)); for (let r = 0; r < rows; r++) for (let i = 0; i < 3; i++) for (const dx of [-GW, 0, GW]) DECO.cloud(cx, 120 + i * 270 + r * 90 + dx, 55 + (i % 2) * 40 + r * 120, 90);
   }
-  return (BGC[theme] = { sky, far, near, T });
+  return (BGC[ck] = { sky, far, near, T });
 }
 function tileDraw(c, layer, off) { const o = -((off % GW) + GW) % GW; c.drawImage(layer, o, 0); c.drawImage(layer, o + GW, 0); }
 
@@ -1038,6 +1038,7 @@ function drawHurdle(c, kind, x, gy) {
 
 /* ---- the run ---- */
 function startRun(lesson, host, onExit) {
+  const portrait = innerHeight > innerWidth * 1.15; GH = portrait ? 620 : 400; GY = GH - 65;
   const L = lesson, T = THEMES[L.theme], bg = makeBG(L.theme);
   const NQ = 7;
   /* pick questions: some from mistakes first */
@@ -1067,7 +1068,7 @@ function startRun(lesson, host, onExit) {
     <div class="bar"><i id="rbar"></i><span id="rflag">🏁</span></div>
     <div class="coins">🪙 <b id="rc">٠</b></div>
   </div>
-  <div class="cwrap"><canvas id="cv" width="${GW}" height="${GH}"></canvas><div class="tip" id="tip">اضغط للقفز فوق العقبات 👆</div></div>
+  <div class="cwrap"><canvas id="cv" width="${GW}" height="${GH}" style="--ar:${GW / GH};aspect-ratio:${GW} / ${GH}"></canvas><div class="tip" id="tip">اضغط للقفز فوق العقبات 👆</div></div>
   <div class="runbtns"><button class="btn jump" id="rj">⬆ اقفز</button></div>`;
   const cv = $('#cv', host), cx = cv.getContext('2d');
   const hud = () => { $('#rh', host).innerHTML = heartsHTML(G.hearts, 5); $('#rc', host).textContent = D(G.coins); $('#rbar', host).style.width = Math.min(100, G.x / END * 100) + '%'; };
@@ -1357,7 +1358,8 @@ function startMistakes(host, onExit) {
 }
 
 /* ===== Screens & router ===== */
-let APP, CLEAN = null, STACK = [];
+let APP, CLEAN = null, STACK = [], DEFER = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); DEFER = e; if (CUR && CUR[0] === 'home') go('home'); });
 function go(name, arg, noPush) {
   if (CLEAN) { try { CLEAN(); } catch (e) { } CLEAN = null; }
   document.querySelectorAll('.qmodal').forEach(m => m.remove());
@@ -1385,7 +1387,7 @@ const SCREENS = {
         <button class="btn blue" id="b4">📓<br>كراسة الأخطاء${S.mist.length ? ` <span class="badge">${D(S.mist.length)}</span>` : ''}</button>
         <button class="btn blue" id="b5">🎖️<br>الجوائز</button>
       </div>
-      <div class="foot"><button class="btn sm" id="b6">👨‍👩‍👦 ركن الأهل</button><button class="btn sm" id="b7">${S.set.sound ? '🔊' : '🔇'}</button><button class="btn sm" id="b8">❓ إزاي ألعب؟</button></div>
+      <div class="foot"><button class="btn sm" id="b6">👨‍👩‍👦 ركن الأهل</button><button class="btn sm" id="b7">${S.set.sound ? '🔊' : '🔇'}</button><button class="btn sm" id="b8">❓ إزاي ألعب؟</button>${DEFER ? '<button class="btn sm go" id="b9">📲 ثبّت اللعبة</button>' : ''}</div>
     </div>`;
     const bubble = $('#bub'); bubble.onclick = () => { bubble.textContent = GREET[rnd(GREET.length)]; sfx('click'); };
     $('#b1').onclick = () => { sfx('click'); music(); go('map'); };
@@ -1396,6 +1398,7 @@ const SCREENS = {
     $('#b6').onclick = () => { sfx('click'); go('parent'); };
     $('#b7').onclick = () => { S.set.sound = !S.set.sound; save(); go('home'); };
     $('#b8').onclick = () => help();
+    if ($('#b9')) $('#b9').onclick = async () => { DEFER.prompt(); await DEFER.userChoice; DEFER = null; go('home'); };
     if (!S.seen.help) { S.seen.help = 1; save(); setTimeout(help, 500); }
   },
 
@@ -1535,7 +1538,7 @@ const SCREENS = {
 
 function help() {
   const m = modal(`<div class="end"><div class="endav">${art('yunus', 'wave')}</div><h2>إزاي ألعب؟</h2>
-    <ol class="how"><li>اختار درس من الخريطة، واقرأ الدرس السريع.</li><li>ابدأ الجري! اضغط على الشاشة أو الزرار عشان تقفز فوق العقبات الصغيرة وتجمع العملات 🪙</li><li>لما توصل لعقبة كبيرة، جاوب على السؤال وهتتكسر بكورة ⚽</li><li>كل غلطة بتخسّرك قلب ❤ (عندك ٥).</li><li>خلّص دروس الوحدة وابدأ الكأس: كل إجابة صح = هدف! اكسب الماتشات لحد النهائي 🏆</li></ol>
+    <ol class="how"><li>اختار درس من الخريطة، واقرأ الدرس السريع.</li><li>ابدأ الجري! اضغط على الشاشة أو الزرار عشان تقفز فوق العقبات الصغيرة وتجمع العملات 🪙</li><li>لما توصل لعقبة كبيرة، جاوب على السؤال وهتتكسر بكورة ⚽</li><li>كل غلطة بتخسّرك قلب ❤ (عندك ٥).</li><li>خلّص دروس الوحدة وابدأ الكأس: كل إجابة صح = هدف! اكسب الماتشات لحد النهائي 🏆</li><li>📲 لتثبيتها على التليفون: من قائمة كروم ⋮ اختار «تثبيت التطبيق».</li></ol>
     <button class="btn go" id="hx">يلا بينا!</button></div>`); $('#hx', m).onclick = () => m.close();
 }
 
@@ -1543,6 +1546,8 @@ function init() {
   load(); APP = $('#app'); music();
   document.addEventListener('pointerdown', () => ac(), { once: true });
   document.addEventListener('visibilitychange', () => { if (document.hidden) { try { speechSynthesis.cancel(); } catch (e) { } } });
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  if ('serviceWorker' in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register('./sw.js').catch(() => { });
   go('home');
 }
 document.addEventListener('DOMContentLoaded', init);
