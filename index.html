@@ -2507,48 +2507,51 @@ async function ocrImage(file, lang, onProg) {
 }
 const KTYPE = { mc: ['اختار الإجابة الصحيحة', '✅'], tf: ['صح ولا غلط؟', '🔀'], ord: ['رتّب', '🔢'], mat: ['وصّل', '🔗'] };
 const qKind = q => q.t === 'mc' ? (q.fill ? 'fill' : 'mc') : q.t;
-const KNAME = { mc: 'اختار الإجابة الصحيحة', fill: 'أكمل', tf: 'صح ولا غلط', ord: 'رتّب بالترتيب', mat: 'وصّل' };
+const KNAME_AR = { mc: 'اختار الإجابة الصحيحة', fill: 'أكمل', tf: 'صح ولا غلط', ord: 'رتّب بالترتيب', mat: 'وصّل' }, KNAME_EN = { mc: 'Choose the correct answer', fill: 'Complete', tf: 'True or False', ord: 'Put in order', mat: 'Match' };
+const T = (ar, en) => EN ? en : ar, KNAME = k => (EN ? KNAME_EN : KNAME_AR)[k];
 const KORDER = ['mc', 'fill', 'tf', 'ord', 'mat'];
+const ET = { s1l1: 'Bones and Muscles', s1l2: 'Changing Seasons', s1l3: 'Seed Germination', s2l1: 'What Plants Need to Grow', s2l2: 'From Flower to Fruit', s2l3: 'Human Growth', s3l1: 'Animal Growth and Reproduction', s3l2: 'Weather and Clouds', s3l3: 'The Water Cycle', s1: 'Body, Seasons and Seeds', s2: 'Plants and Humans', s3: 'Animals, Weather and Water' };
+const LT = x => (EN && ET[x.id]) || x.title, N = n => EN ? String(n) : D(n);
 const H = t => esc(t).replace(/\n/g, '<br>');
 
 Object.assign(SCREENS, {
   coach() {
     const ix = kbBuild(SUBJ);
-    APP.innerHTML = bar('🧑‍🏫 كوتش') + `<div class="coachpg"><div class="cin"><textarea id="cq" rows="3" placeholder="اكتب سؤالك هنا… أو صوّره 📷"></textarea>
-      <div class="crow"><label class="btn sm cph">📷 صوّر<input id="cph" type="file" accept="image/*" capture="environment" hidden></label><label class="btn sm cph">🖼️ معرض<input id="cgal" type="file" accept="image/*" hidden></label><button class="btn go sm" id="cask">✨ جاوبني</button></div></div>
-      <div class="cans" id="cans"><div class="cemp"><div class="lbig">${art('yunus', 'think')}</div>أهلًا يا بطل! اكتب أي سؤال من دروس ${SUBJ.name} وأنا أجيبلك الإجابة النموذجية من كتابك 📘</div></div></div>`;
+    APP.innerHTML = bar(T('🧑‍🏫 كوتش', '🧑‍🏫 Coach')) + `<div class="coachpg"><div class="cin"><textarea id="cq" rows="3" placeholder="${T('اكتب سؤالك هنا… أو صوّره 📷', 'Type your question here… or snap it 📷')}"></textarea>
+      <div class="crow"><label class="btn sm cph">${T('📷 صوّر', '📷 Camera')}<input id="cph" type="file" accept="image/*" capture="environment" hidden></label><label class="btn sm cph">${T('🖼️ معرض', '🖼️ Gallery')}<input id="cgal" type="file" accept="image/*" hidden></label><button class="btn go sm" id="cask">${T('✨ جاوبني', '✨ Answer me')}</button></div></div>
+      <div class="cans" id="cans"><div class="cemp"><div class="lbig">${art('yunus', 'think')}</div>${T('أهلًا يا بطل! اكتب أي سؤال من دروس ' + SUBJ.name + ' وأنا أجيبلك الإجابة النموذجية من كتابك 📘', 'Hi champ! Type any question from your Science lessons and I will find the model answer from your book 📘')}</div></div></div>`;
     wireBack('home');
     const ans = $('#cans'), q = $('#cq');
-    const fmt = r => { const e = r.e, head = e.t === 'q' ? '✅ الإجابة' : e.t === 'card' ? '📖 من الدرس' : '📒 المعنى';
-      return `<div class="ka"><div class="kt">${head}${e.t === 'q' ? '' : ' · ' + esc(e.q)}</div><div class="kans ${e.en && e.t === 'q' ? 'ltr' : ''}">${e.t === 'q' ? `<div class="kq ${e.en ? 'ltr' : ''}">${H(e.q)}</div>` : ''}${H(e.a)}</div>${e.why ? `<div class="kw">💡 ${H(e.why)}</div>` : ''}<div class="ks">📘 ${esc(e.src.title)}</div></div>`; };
+    const fmt = r => { const e = r.e, head = e.t === 'q' ? T('✅ الإجابة', '✅ Answer') : e.t === 'card' ? T('📖 من الدرس', '📖 From the lesson') : T('📒 المعنى', '📒 Meaning');
+      return `<div class="ka"><div class="kt">${head}${e.t === 'q' ? '' : ' · ' + esc(e.q)}</div><div class="kans ${e.en && e.t === 'q' ? 'ltr' : ''}">${e.t === 'q' ? `<div class="kq ${e.en ? 'ltr' : ''}">${H(e.q)}</div>` : ''}${H(e.a)}</div>${e.why ? `<div class="kw">💡 ${H(e.why)}</div>` : ''}<div class="ks">📘 ${esc(LT(e.src))}</div></div>`; };
     const run = () => {
       const t = q.value.trim(); if (!t) { q.focus(); return; } sfx('click');
       const res = kbSearch(ix, t, 5), top = res[0]; let h = `<div class="cb2 me">${H(t.length > 160 ? t.slice(0, 160) + '…' : t)}</div>`;
       if (top && top.s >= .5) { h += fmt(top); const more = res.slice(1).filter(r => r.s >= .5).slice(0, 2); more.forEach(r => { h += `<div class="ksim">🔎 ${esc(r.e.q.slice(0, 90))} → <b>${esc(r.e.a.split('\n')[0].slice(0, 90))}</b></div>`; }); }
-      else if (top && top.s >= .35) h += `<div class="knf">مش متأكد، دي أقرب حاجة لقيتها:</div>${fmt(top)}`;
-      else h += `<div class="knf">السؤال ده مش موجود في بنك الإجابات. جرّب تكتب الكلمات المهمة بس (زي: pollination أو البراكين).</div>`;
+      else if (top && top.s >= .35) h += `<div class="knf">${T('مش متأكد، دي أقرب حاجة لقيتها:', 'Not sure — this is the closest match I found:')}</div>${fmt(top)}`;
+      else h += `<div class="knf">${T('السؤال ده مش موجود في بنك الإجابات. جرّب تكتب الكلمات المهمة بس (زي: البراكين).', 'This question is not in the answer bank. Try typing just the key words (e.g. pollination).')}</div>`;
       ans.innerHTML = h; ans.scrollTop = 0; q.value = '';
     };
     $('#cask').onclick = run;
     q.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); run(); } });
     const photo = async inp => {
       const f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
-      ans.innerHTML = '<div class="cb2 ai wait">بقرأ الصورة… (أول مرة ممكن تاخد دقيقة ومحتاجة إنترنت)</div>';
-      try { const t = await ocrImage(f, EN ? 'eng' : 'ara', p => { ans.innerHTML = `<div class="cb2 ai wait">بقرأ الصورة… ${Math.round(p * 100)}%</div>`; }); if (t.replace(/\s/g, '').length < 6) throw 0; q.value = t; ans.innerHTML = '<div class="cb2 ai wait">ده اللي قريته. صلّح أي غلط في المربع وبعدين دوس «جاوبني».</div>'; }
-      catch (e) { ans.innerHTML = '<div class="cb2 err">مقدرتش أقرأ الصورة. صوّر السؤال من قريب ومستقيم أو اكتبه.</div>'; }
+      ans.innerHTML = `<div class="cb2 ai wait">${T('بقرأ الصورة… (أول مرة ممكن تاخد دقيقة ومحتاجة إنترنت)', 'Reading the photo… (first time may take a minute and needs internet)')}</div>`;
+      try { const t = await ocrImage(f, EN ? 'eng' : 'ara', p => { ans.innerHTML = `<div class="cb2 ai wait">${T('بقرأ الصورة…', 'Reading the photo…')} ${Math.round(p * 100)}%</div>`; }); if (t.replace(/\s/g, '').length < 6) throw 0; q.value = t; ans.innerHTML = `<div class="cb2 ai wait">${T('ده اللي قريته. صلّح أي غلط في المربع وبعدين دوس «جاوبني».', 'This is what I read. Fix any mistakes in the box, then press “Answer me”.')}</div>`; }
+      catch (e) { ans.innerHTML = `<div class="cb2 err">${T('مقدرتش أقرأ الصورة. صوّر السؤال من قريب ومستقيم أو اكتبه.', 'Could not read the photo. Take it closer and straight, or type the question.')}</div>`; }
     };
     $('#cph').onchange = e => photo(e.target); $('#cgal').onchange = e => photo(e.target);
   },
 
   exercises(lid) {
     if (!lid) {
-      APP.innerHTML = bar('📝 التمارين') + '<div class="exl">' + UNITS.map(u => `<div class="exu">${u.icon} ${esc(u.title)}</div>` + u.lessons.map(l => `<button class="btn exc" data-id="${l.id}"><b>${l.icon} ${esc(l.title)}</b><span>${D(l.qs.length)} سؤال</span></button>`).join('')).join('') + '</div>'; wireBack('home');
+      APP.innerHTML = bar(T('📝 التمارين', '📝 Exercises')) + '<div class="exl">' + UNITS.map(u => `<div class="exu">${u.icon} ${esc(LT(u))}</div>` + u.lessons.map(l => `<button class="btn exc" data-id="${l.id}"><b>${l.icon} ${esc(LT(l))}</b><span>${EN ? l.qs.length + ' questions' : D(l.qs.length) + ' سؤال'}</span></button>`).join('')).join('') + '</div>'; wireBack('home');
       APP.querySelectorAll('.exc').forEach(b => b.onclick = () => { sfx('click'); go('exercises', b.dataset.id); }); return;
     }
     const l = LBY[lid]; if (!l) return go('exercises');
     const secs = {}; l.qs.forEach(q => (secs[qKind(q)] = secs[qKind(q)] || []).push(q));
-    const body = KORDER.filter(k => secs[k]).map((k, si) => `<div class="exs"><div class="exst">${D(si + 1)} · ${KNAME[k]} <small>${D(secs[k].length)}</small></div>` + secs[k].map((q, i) => `<div class="exq"><button class="exh"><i>${D(i + 1)}</i><span class="${EN ? 'ltr' : ''}">${H(q.q)}</span></button><div class="exa" hidden><div class="kans ${EN ? 'ltr' : ''}">${H(qAnswer(q))}</div>${q.why ? `<div class="kw">💡 ${H(q.why)}</div>` : ''}</div></div>`).join('') + '</div>').join('');
-    APP.innerHTML = bar('📝 ' + esc(l.title)) + `<div class="exl">${body}</div>`; wireBack('exercises');
+    const body = KORDER.filter(k => secs[k]).map((k, si) => `<div class="exs"><div class="exst">${N(si + 1)} · ${KNAME(k)} <small>${N(secs[k].length)}</small></div>` + secs[k].map((q, i) => `<div class="exq"><button class="exh"><i>${N(i + 1)}</i><span class="${EN ? 'ltr' : ''}">${H(q.q)}</span></button><div class="exa" hidden><div class="kans ${EN ? 'ltr' : ''}">${H(qAnswer(q))}</div>${q.why ? `<div class="kw">💡 ${H(q.why)}</div>` : ''}</div></div>`).join('') + '</div>').join('');
+    APP.innerHTML = bar('📝 ' + esc(LT(l))) + `<div class="exl">${body}</div>`; wireBack('exercises');
     APP.querySelectorAll('.exh').forEach(b => b.onclick = () => { sfx('click'); const a = b.nextElementSibling; a.hidden = !a.hidden; b.parentNode.classList.toggle('open', !a.hidden); });
   }
 });
