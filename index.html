@@ -223,7 +223,7 @@ body.en #pq,body.en .zone{direction:ltr}body.en #pq{text-align:center}
 .btn.coachb{background:linear-gradient(#8a6cff,#6a4be0);border-bottom-color:#4a31b3;color:#fff;font-weight:900;letter-spacing:.5px}
 .grid2.two{margin-bottom:0}
 .coachpg{padding:10px 14px;display:flex;flex-direction:column;gap:10px;height:calc(100dvh - 70px)}
-.cin textarea{width:100%;border:3px solid var(--n);border-radius:16px;padding:10px;font:700 1rem Cairo,sans-serif;resize:none;direction:auto;background:#fff}
+.cin textarea{text-align:start;width:100%;border:3px solid var(--n);border-radius:16px;padding:10px;font:700 1rem Cairo,sans-serif;resize:none;direction:auto;background:#fff}
 .crow{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.crow .btn{flex:1}
 .cans{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-bottom:20px}
 .cemp{text-align:center;font-weight:800;color:var(--n);padding:10px}.cemp .lbig{height:110px}
@@ -2483,7 +2483,7 @@ function kbSearch(ix, query, n) {
     [e.tq, e.ta].forEach(ds => {
       if (!ds.size) return; let Wd = 0, Wi = 0, m = 0; ds.forEach(t => { const v = idf(t); Wd += v; if (qt.has(t)) { Wi += v; m++; } });
       if (!Wi) return; if (m < 2 && !(ds.size <= 2 && qt.size <= 3)) return;
-      const dice = 2 * Wi / (Wq + Wd), cov = Wi / Wq, dcov = Wi / Wd, sc = Math.max(dice, Math.sqrt(cov * dcov) * (ds === e.tq ? 1 : .92)); if (sc > best) best = sc;
+      let dice = 2 * Wi / (Wq + Wd), cov = Wi / Wq, dcov = Wi / Wd, sc = Math.max(dice, Math.sqrt(cov * dcov) * (ds === e.tq ? 1 : .92)); if (m >= 3 && ds.size >= 4 && qt.size > 8) sc = Math.max(sc, dcov * .85); if (sc > best) best = sc;
     });
     if (!best) return;
     if (e.t === 'vocab') { const tn = kNrm(e.q); if (tn && qn.indexOf(tn) >= 0 && qt.size <= 3) best += .25; }
@@ -2505,6 +2505,15 @@ async function ocrImage(file, lang, onProg) {
     const r = await _tess.w.recognize(c); return (r.data.text || '').replace(/[|_]{2,}/g, ' ').trim();
   } finally { URL.revokeObjectURL(url); }
 }
+function cleanOcr(t, en) {
+  const keep = en ? /[^A-Za-z0-9\s.,?!:;'()%\/+=-]/g : /[^\u0600-\u06ff0-9\s.,?!:;()%\/+=-]/g;
+  const out = [], seen = {};
+  t.split(/\n+/).forEach(line => {
+    const w = line.replace(keep, ' ').replace(/[|_~^<>\[\]{}\\]+/g, ' ').split(/\s+/).filter(x => x && (/\d/.test(x) || x.length > 1 || /^[aAiI]$/.test(x)) && !(en && x.length > 3 && !/[aeiouyAEIOUY]/.test(x))).join(' ');
+    if (w.length >= 8 && !seen[w.toLowerCase()]) { seen[w.toLowerCase()] = 1; out.push(w); }
+  });
+  return out.join('\n').slice(0, 600);
+}
 const KTYPE = { mc: ['اختار الإجابة الصحيحة', '✅'], tf: ['صح ولا غلط؟', '🔀'], ord: ['رتّب', '🔢'], mat: ['وصّل', '🔗'] };
 const qKind = q => q.t === 'mc' ? (q.fill ? 'fill' : 'mc') : q.t;
 const KNAME_AR = { mc: 'اختار الإجابة الصحيحة', fill: 'أكمل', tf: 'صح ولا غلط', ord: 'رتّب بالترتيب', mat: 'وصّل' }, KNAME_EN = { mc: 'Choose the correct answer', fill: 'Complete', tf: 'True or False', ord: 'Put in order', mat: 'Match' };
@@ -2517,27 +2526,27 @@ const H = t => esc(t).replace(/\n/g, '<br>');
 Object.assign(SCREENS, {
   coach() {
     const ix = kbBuild(SUBJ);
-    APP.innerHTML = bar(T('🧑‍🏫 كوتش', '🧑‍🏫 Coach')) + `<div class="coachpg"><div class="cin"><textarea id="cq" rows="3" placeholder="${T('اكتب سؤالك هنا… أو صوّره 📷', 'Type your question here… or snap it 📷')}"></textarea>
+    APP.innerHTML = bar(T('🧑‍🏫 كوتش', '🧑‍🏫 Coach')) + `<div class="coachpg"><div class="cin"><textarea id="cq" dir="auto" rows="4" placeholder="${T('اكتب سؤالك هنا… أو صوّره 📷', 'Type your question here… or snap it 📷')}"></textarea>
       <div class="crow"><label class="btn sm cph">${T('📷 صوّر', '📷 Camera')}<input id="cph" type="file" accept="image/*" capture="environment" hidden></label><label class="btn sm cph">${T('🖼️ معرض', '🖼️ Gallery')}<input id="cgal" type="file" accept="image/*" hidden></label><button class="btn go sm" id="cask">${T('✨ جاوبني', '✨ Answer me')}</button></div></div>
       <div class="cans" id="cans"><div class="cemp"><div class="lbig">${art('yunus', 'think')}</div>${T('أهلًا يا بطل! اكتب أي سؤال من دروس ' + SUBJ.name + ' وأنا أجيبلك الإجابة النموذجية من كتابك 📘', 'Hi champ! Type any question from your Science lessons and I will find the model answer from your book 📘')}</div></div></div>`;
     wireBack('home');
     const ans = $('#cans'), q = $('#cq');
     const fmt = r => { const e = r.e, head = e.t === 'q' ? T('✅ الإجابة', '✅ Answer') : e.t === 'card' ? T('📖 من الدرس', '📖 From the lesson') : T('📒 المعنى', '📒 Meaning');
       return `<div class="ka"><div class="kt">${head}${e.t === 'q' ? '' : ' · ' + esc(e.q)}</div><div class="kans ${e.en && e.t === 'q' ? 'ltr' : ''}">${e.t === 'q' ? `<div class="kq ${e.en ? 'ltr' : ''}">${H(e.q)}</div>` : ''}${H(e.a)}</div>${e.why ? `<div class="kw">💡 ${H(e.why)}</div>` : ''}<div class="ks">📘 ${esc(LT(e.src))}</div></div>`; };
-    const run = () => {
-      const t = q.value.trim(); if (!t) { q.focus(); return; } sfx('click');
-      const res = kbSearch(ix, t, 5), top = res[0]; let h = `<div class="cb2 me">${H(t.length > 160 ? t.slice(0, 160) + '…' : t)}</div>`;
+    const run = (txt, ocr) => {
+      const t = (typeof txt === 'string' ? txt : q.value).trim(); if (!t) { q.focus(); return; } sfx('click');
+      const res = kbSearch(ix, t, 5), top = res[0]; let h = `<div class="cb2 me ${EN ? 'ltr' : ''}">${H(t.length > 200 ? t.slice(0, 200) + '…' : t)}</div>`;
       if (top && top.s >= .5) { h += fmt(top); const more = res.slice(1).filter(r => r.s >= .5).slice(0, 2); more.forEach(r => { h += `<div class="ksim">🔎 ${esc(r.e.q.slice(0, 90))} → <b>${esc(r.e.a.split('\n')[0].slice(0, 90))}</b></div>`; }); }
-      else if (top && top.s >= .35) h += `<div class="knf">${T('مش متأكد، دي أقرب حاجة لقيتها:', 'Not sure — this is the closest match I found:')}</div>${fmt(top)}`;
+      else if (top && top.s >= (ocr ? .2 : .3)) { h += `<div class="knf">${T('مش متأكد، دي أقرب إجابات لقيتها:', 'Not sure — these are the closest matches I found:')}</div>` + res.filter(r => r.s >= (ocr ? .2 : .3)).slice(0, 3).map(fmt).join(''); }
       else h += `<div class="knf">${T('السؤال ده مش موجود في بنك الإجابات. جرّب تكتب الكلمات المهمة بس (زي: البراكين).', 'This question is not in the answer bank. Try typing just the key words (e.g. pollination).')}</div>`;
-      ans.innerHTML = h; ans.scrollTop = 0; q.value = '';
+      ans.innerHTML = h; ans.scrollTop = 0; if (!ocr) q.value = '';
     };
-    $('#cask').onclick = run;
+    $('#cask').onclick = () => run();
     q.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); run(); } });
     const photo = async inp => {
       const f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
       ans.innerHTML = `<div class="cb2 ai wait">${T('بقرأ الصورة… (أول مرة ممكن تاخد دقيقة ومحتاجة إنترنت)', 'Reading the photo… (first time may take a minute and needs internet)')}</div>`;
-      try { const t = await ocrImage(f, EN ? 'eng' : 'ara', p => { ans.innerHTML = `<div class="cb2 ai wait">${T('بقرأ الصورة…', 'Reading the photo…')} ${Math.round(p * 100)}%</div>`; }); if (t.replace(/\s/g, '').length < 6) throw 0; q.value = t; ans.innerHTML = `<div class="cb2 ai wait">${T('ده اللي قريته. صلّح أي غلط في المربع وبعدين دوس «جاوبني».', 'This is what I read. Fix any mistakes in the box, then press “Answer me”.')}</div>`; }
+      try { const raw = await ocrImage(f, EN ? 'eng' : 'ara', p => { ans.innerHTML = `<div class="cb2 ai wait">${T('بقرأ الصورة…', 'Reading the photo…')} ${Math.round(p * 100)}%</div>`; }), t = cleanOcr(raw, EN); if (t.replace(/\s/g, '').length < 8) throw 0; q.value = t; run(t, true); }
       catch (e) { ans.innerHTML = `<div class="cb2 err">${T('مقدرتش أقرأ الصورة. صوّر السؤال من قريب ومستقيم أو اكتبه.', 'Could not read the photo. Take it closer and straight, or type the question.')}</div>`; }
     };
     $('#cph').onchange = e => photo(e.target); $('#cgal').onchange = e => photo(e.target);
