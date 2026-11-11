@@ -239,6 +239,8 @@ body.en #pq,body.en .zone{direction:ltr}body.en #pq{text-align:center}
 .exq{background:#fff;border:2px solid #d7def2;border-radius:14px;overflow:hidden}.exq.open{border-color:#6a4be0}
 .exh{all:unset;display:flex;gap:10px;padding:10px 12px;width:100%;box-sizing:border-box;cursor:pointer;font-weight:800}.exh i{font-style:normal;background:#eef;border-radius:50%;min-width:26px;height:26px;display:grid;place-items:center;font-size:.85rem}
 .exa{padding:0 12px 12px}
+
+.exnote{margin:8px 14px 0;padding:8px 12px;background:#e8f7ec;border-radius:12px;font-weight:800;color:#1f7a3a;text-align:center}
 </style></head><body><div id="app"></div>
 <script>
 /* ===== Captain Yunus — cartoon art (all SVG, drawn in code) ===== */
@@ -2448,6 +2450,291 @@ function init() {
 }
 document.addEventListener('DOMContentLoaded', init);
 
+/* ===== School-textbook exercises (تدريبات الدرس) with model answers =====
+   Each item: [section, question, answer]. Taken from the official school textbooks only. */
+const TF = "صواب أم خطأ؟", CH = "اختر الإجابة الصحيحة", FL = "أكمل", WH = "بم تفسر؟", AN = "أجب";
+const EX_DATA = {
+/* ---------- Social Studies (الكتاب المدرسي: مصر حكاية وطن وحضارة) ---------- */
+u1l1: [
+ [TF, "عدد خطوط الطول أقل من عدد دوائر العرض.", "خطأ ❌ — خطوط الطول ٣٦٠ ودوائر العرض ١٨٠ تقريبًا."],
+ [TF, "تقع مصر جنوب دائرة الاستواء.", "خطأ ❌ — تقع مصر شمال دائرة الاستواء."],
+ [TF, "تساعدنا خطوط الطول في تحديد الموقع شرقًا وغربًا.", "صواب ✅"],
+ [CH, "يبلغ الفرق الزمني بين كل خط طول والخط الذي يليه: (دقيقة واحدة – أربع دقائق – سبع دقائق – عشر دقائق)", "أربع دقائق"],
+ [CH, "يُعرف خط الطول الرئيسي باسم: (مدار السرطان – مدار الجدي – دائرة الاستواء – خط جرينتش)", "خط جرينتش"],
+ [FL, "يمر مدار السرطان في مصر جهة ........", "الجنوب"],
+ [FL, "دائرة العرض الرئيسية التي تقسم الكرة الأرضية لنصفين متساويين هي ........", "دائرة الاستواء"],
+ [AN, "ما المقصود بخطوط الطول؟", "خطوط وهمية تمتد من القطب الشمالي إلى القطب الجنوبي، وتساعد في تحديد الموقع شرقًا وغربًا."],
+ [AN, "ما المقصود بالموقع الفلكي؟", "موقع المكان بالنسبة لدوائر العرض وخطوط الطول."],
+ [AN, "إذا كانت القاهرة على خط طول ٣٠° شرقًا ولندن على خط طول صفر°، فكم تكون الساعة في القاهرة عندما تكون ٦ مساءً في لندن؟ (كل ١٥° = ساعة واحدة)", "الفرق ٣٠° ÷ ١٥° = ساعتان، والقاهرة شرق لندن، فتكون الساعة ٨ مساءً."],
+ [AN, "حدّد أوجه الشبه والاختلاف بين خط جرينتش ودائرة الاستواء.", "الشبه: كلاهما خط وهمي نقيس منه (صفر°). الاختلاف: خط جرينتش خط طول يمتد من القطب إلى القطب ويقسم الأرض شرقًا وغربًا، ودائرة الاستواء دائرة عرض تقسم الأرض إلى نصفين شمالي وجنوبي."],
+],
+u1l2: [
+ [TF, "يمتد وادي النيل من حدود مصر الجنوبية حتى مدينة العريش.", "خطأ ❌ — يمتد حتى البحر المتوسط شمالًا، والعريش في سيناء."],
+ [TF, "يقع منخفض الفيوم في الصحراء الشرقية قرب نهر النيل.", "خطأ ❌ — يقع في الصحراء الغربية."],
+ [TF, "تُعد هضبة الجلف الكبير أحد مظاهر السطح في الصحراء الغربية.", "صواب ✅"],
+ [TF, "تُعد الصحراء الشرقية من أغنى مناطق مصر بمعدن الذهب.", "صواب ✅"],
+ [TF, "تعتمد الزراعة في الوادي والدلتا على المياه الجوفية.", "خطأ ❌ — تعتمد على مياه نهر النيل."],
+ [TF, "أدى تنوع مظاهر سطح مصر إلى تنوع الأنشطة الاقتصادية.", "صواب ✅"],
+ [CH, "أصغر أقسام سطح مصر مساحة: (شبه جزيرة سيناء – الوادي والدلتا – الصحراء الغربية – الصحراء الشرقية)", "الوادي والدلتا"],
+ [CH, "تكونت جبال البحر الأحمر بفعل: (الانكسارات – حركة المياه – حركة الهواء – الالتواءات)", "الانكسارات"],
+ [CH, "يوجد في شبه جزيرة سيناء: (جبل سانت كاترين – جبل شايب البنات – هضبة الجلالة القبلية – هضبة الجلالة البحرية)", "جبل سانت كاترين"],
+ [AN, "ما المقصود بالأودية الجافة؟", "مجارٍ مائية قديمة تكونت في عصور مطيرة وتجف الآن، ويجري فيها الماء وقت السيول فقط."],
+ [AN, "فسّر: قيام الزراعة في الواحات.", "لتوفر المياه الجوفية (العيون والآبار)."],
+],
+u1l3: [
+ [TF, "يؤثر الموقع الفلكي لمصر على مناخها.", "صواب ✅"],
+ [TF, "تستغرق الأرض ٢٤ ساعة لتكمل دورة كاملة حول الشمس.", "خطأ ❌ — تكمل دورتها حول الشمس في ٣٦٥ يومًا، و٢٤ ساعة هي دورتها حول نفسها."],
+ [TF, "تتعامد أشعة الشمس على دائرة الاستواء مرتين كل عام.", "صواب ✅ — في ٢١ مارس و٢٣ سبتمبر."],
+ [TF, "يبدأ فصل الربيع في مصر عند تعامد الشمس على مدار السرطان.", "خطأ ❌ — يبدأ الصيف عند تعامدها على مدار السرطان، والربيع عند تعامدها على الاستواء."],
+ [TF, "تتعامد الشمس على مدار الجدي خلال فصل الخريف في مصر.", "خطأ ❌ — تتعامد عليه في الشتاء (٢١ ديسمبر)."],
+ [FL, "تتراكم الثلوج شتاءً في سيناء على قمة جبل ........", "سانت كاترين"],
+ [FL, "تهب رياح الخماسين على مصر في فصل ........", "الربيع"],
+ [FL, "ندرة الأمطار إحدى الخصائص المناخية التي تميّز الإقليم ........", "الصحراوي"],
+ [WH, "تعاقب فصول السنة الأربعة.", "بسبب دوران الأرض حول الشمس وميل محورها."],
+ [WH, "اعتدال الحرارة على المدن المطلة على البحر المتوسط صيفًا.", "بسبب تأثير البحر ونسائمه."],
+ [AN, "ما المقصود بالإقليم المناخي؟", "منطقة تتشابه في خصائصها المناخية (الحرارة والأمطار والرياح)."],
+ [AN, "ما العلاقة بين فصل الربيع وانتشار أمراض الجهاز التنفسي في مصر؟", "تهب رياح الخماسين المحملة بالأتربة في الربيع فتسبب أمراض الجهاز التنفسي."],
+ [AN, "دلل على الأهمية الاقتصادية لإقليم مناخ البحر المتوسط.", "الزراعة المطرية وصيد الأسماك والسياحة الشاطئية والموانئ."],
+],
+u1l4: [
+ [TF, "ينمو نبات البردي في المستنقعات وعلى ضفاف النيل.", "صواب ✅"],
+ [TF, "تنمو أشجار المانجروف في المناطق الزراعية في وادي النيل.", "خطأ ❌ — تنمو على سواحل البحر الأحمر."],
+ [TF, "تُستخدم بعض النباتات الطبيعية في صناعة الأدوية ومستحضرات التجميل.", "صواب ✅"],
+ [TF, "تسعى الدولة إلى إزالة النباتات الطبيعية لزراعة المحاصيل الزراعية بدلًا منها.", "خطأ ❌ — تسعى الدولة لحمايتها والحفاظ عليها."],
+ [TF, "الزواحف من الحيوانات البرية التي تعيش في المناطق الصحراوية.", "صواب ✅"],
+ [WH, "أهمية النباتات الطبيعية.", "مصدر للغذاء والدواء وعلف الحيوانات، وتحمي التربة، وتدخل في الصناعات."],
+ [WH, "تنوّع النباتات الطبيعية في مصر.", "بسبب تنوع المناخ والتضاريس."],
+ [WH, "تعرّض بعض النباتات الطبيعية والحيوانات البرية للانقراض.", "بسبب الصيد الجائر والرعي الجائر وقطع الأشجار والتلوث."],
+ [AN, "ما العلاقة بين الصيد الجائر والتنوع البيولوجي؟", "الصيد الجائر يؤدي إلى انقراض أنواع من الحيوانات فيقل التنوع البيولوجي."],
+ [AN, "اقترح بعض الأساليب للمحافظة على النباتات الطبيعية والحيوانات البرية.", "إنشاء المحميات الطبيعية، وسن قوانين تمنع الصيد الجائر وقطع الأشجار، ونشر الوعي."],
+ [AN, "ما المقصود بالمحمية الطبيعية؟", "منطقة تحميها الدولة بقانون للحفاظ على ما بها من كائنات حية وموارد طبيعية."],
+ [AN, "ما أهمية إقامة محميات طبيعية؟", "حماية الكائنات من الانقراض، والحفاظ على التنوع البيولوجي، والسياحة البيئية والبحث العلمي."],
+ [AN, "ما دلالة وضع مادة (٤٥) في الدستور المصري تختص بالمحميات؟", "اهتمام الدولة بحماية البيئة والمحميات الطبيعية وحظر التعدي عليها."],
+],
+u2l1: [
+ [TF, "لعب نهر النيل دورًا كبيرًا في قيام الحضارة المصرية.", "صواب ✅"],
+ [TF, "استخدم المصري القديم المعادن والصخور في نحت التماثيل وصناعة أدوات الزينة والحلي.", "صواب ✅"],
+ [TF, "بدأ تأسيس الجيش المصري في عصرنا الحديث.", "خطأ ❌ — بدأ منذ مصر القديمة."],
+ [CH, "أحد العوامل البشرية التي ساعدت على نشأة الحضارة المصرية القديمة هو: (توافر المناخ المعتدل – الموقع الجغرافي المتميز – وجود نهر النيل – إقامة حكومة مركزية)", "إقامة حكومة مركزية"],
+ [CH, "السبب الرئيسي في معرفة المصري القديم للوحدة والتعاون هو: (الأرض الصحراوية – نهر النيل – المناخ المعتدل – الثروات المعدنية)", "نهر النيل"],
+ [CH, "أحد العوامل الطبيعية التي ساعدت على بقاء آثار المصريين القدماء حتى يومنا الحاضر: (الحكومة المركزية – المناخ الجاف – الموقع الجغرافي – نهر النيل)", "المناخ الجاف"],
+ [WH, "أهمية الجيش في مصر القديمة.", "حماية حدود البلاد وتأمينها من الغزو وحماية الحضارة."],
+ [WH, "تنوع الأنشطة الاقتصادية في مصر قديمًا.", "لتنوع الموارد الطبيعية (الزراعة والتعدين والتجارة)."],
+ [AN, "لماذا كان قياس مستوى مياه النيل مهمًّا للمصريين القدماء؟", "لتنظيم الري والزراعة والتنبؤ بحالة الفيضان: ارتفاعه الشديد يدمر المحاصيل وانخفاضه يسبب الجفاف."],
+ [AN, "ماذا كان يحدث إذا كان الفيضان أقل من المتوقع؟", "قلة مياه الري ونقص المحاصيل والغذاء."],
+ [AN, "ما النتائج المترتبة على إقامة حكومة مركزية في مصر قديمًا؟", "توحيد البلاد وتنظيم الري والزراعة وتحقيق الأمن والاستقرار."],
+ [AN, "دلل: ساهمت الحدود الطبيعية في نشأة الحضارة المصرية القديمة.", "الصحراء شرقًا وغربًا والبحر شمالًا والجنادل جنوبًا حمت مصر من الغزو فنعمت بالأمن."],
+],
+u2l2: [
+ [TF, "بدأ العصر الحجري القديم عند معرفة الإنسان الكتابة.", "خطأ ❌ — الكتابة عُرفت بعد انتهاء عصور ما قبل التاريخ."],
+ [TF, "انتقل المصري القديم من الهضاب إلى وادي النيل في العصر الحجري الحديث.", "صواب ✅"],
+ [TF, "اعتمد الإنسان على الزراعة كمصدر رئيسي للغذاء في العصر الحجري القديم.", "خطأ ❌ — اعتمد على الصيد وجمع الثمار، والزراعة بدأت في العصر الحجري الحديث."],
+ [TF, "توحدت مصر لأول مرة في تاريخها تحت حكم الملك مينا.", "صواب ✅"],
+ [CH, "يُعد أهم اكتشافات الإنسان في العصر الحجري القديم: (الورق – النحاس – النار – الزراعة)", "النار"],
+ [CH, "بدأ المصريون القدماء في العصر الحجري الحديث: (الترحال المستمر – سكن الكهوف – الاستقرار حول وادي النيل – استخدام النحاس)", "الاستقرار حول وادي النيل"],
+ [FL, "أصبحت حياة المصري القديم أكثر استقرارًا في العصر ........", "الحجري الحديث"],
+ [AN, "ما المقصود بعصور ما قبل التاريخ؟", "العصور التي سبقت معرفة الإنسان للكتابة."],
+ [WH, "انتقال المصري القديم من الهضاب إلى وادي النيل في العصر الحجري الحديث.", "بسبب الجفاف وقلة الأمطار فتجمّع حول النهر."],
+ [WH, "أهمية نهر النيل بالنسبة للحضارة المصرية القديمة.", "وفّر المياه والتربة الخصبة والزراعة والاستقرار."],
+ [AN, "أين نشأت حضارة نقادة؟", "في صعيد مصر."],
+],
+u2l3: [
+ [TF, "اهتم ملوك العصر العتيق ببناء الدولة وتأمينها.", "صواب ✅"],
+ [TF, "بنى الملك خوفو أول هرم مدرج في التاريخ.", "خطأ ❌ — الملك زوسر هو الذي بنى أول هرم مدرج."],
+ [TF, "يقع تمثال أبو الهول أمام هرم خفرع.", "صواب ✅"],
+ [TF, "يُعد الملك أمنمحات الثالث من ملوك عصر الدولة القديمة.", "خطأ ❌ — من ملوك الدولة الوسطى."],
+ [TF, "تم بناء سد اللاهون في الفيوم خلال عصر الدولة الوسطى.", "صواب ✅"],
+ [TF, "استطاع الملك تحتمس الثالث الانتصار في معركة قادش.", "خطأ ❌ — انتصر في معركة مجدو، وقادش كانت في عهد رمسيس الثاني."],
+ [TF, "وقّع الملك رمسيس الثاني أول معاهدة سلام في التاريخ المصري القديم.", "صواب ✅"],
+ [FL, "الملك خفرع صاحب الهرم الأوسط و........", "تمثال أبو الهول"],
+ [FL, "أُطلق على عصر الدولة القديمة عصر ........", "بناء الأهرامات"],
+ [FL, "قام الملك أمنمحات الثالث بإنشاء ........", "سد اللاهون"],
+ [FL, "عُرف عصر الدولة الحديثة بعصر ........", "المجد الحربي"],
+ [FL, "عاصمة مصر في العصر العتيق هي ........", "منف"],
+ [WH, "تسمية عصر الدولة الوسطى بعصر الرخاء الاقتصادي.", "لاهتمام ملوكها بالزراعة والري (سد اللاهون) والتجارة والتعدين."],
+ [WH, "قيام الملك سنوسرت الثالث بحفر قناة سيزوستريس.", "لربط النيل بالبحر الأحمر وتسهيل التجارة."],
+ [WH, "يُعد الملك رمسيس الثاني من أهم ملوك الدولة الحديثة.", "لانتصاراته الحربية (قادش) وتوقيعه معاهدة السلام وبنائه المعابد."],
+ [AN, "رتّب من الأقدم إلى الأحدث: نجاح مينا في توحيد مصر – بناء هرم زوسر – نحت تمثال أبو الهول – حفر قناة سيزوستريس – غزو الهكسوس – معركة مجدو – معركة قادش.", "توحيد مصر ← هرم زوسر ← أبو الهول ← قناة سيزوستريس ← غزو الهكسوس ← معركة مجدو ← معركة قادش."],
+ [AN, "سجّل أهم أعمال الملك أمنمحات الثالث.", "إنشاء سد اللاهون وتنظيم مياه الفيضان واستصلاح أراضي الفيوم."],
+],
+u2l4: [
+ [TF, "رحّب المصريون بالإسكندر الأكبر لأنه خلصهم من الحكم الروماني.", "خطأ ❌ — خلّصهم من الحكم الفارسي."],
+ [TF, "استمر الاضطهاد الروماني للمصريين حتى دخل الإسكندر الأكبر مصر.", "خطأ ❌ — جاء الرومان بعد الإسكندر والبطالمة."],
+ [TF, "خطط بطلميوس لبناء مدينة الإسكندرية لتكون عاصمة جديدة لمصر.", "خطأ ❌ — الإسكندر الأكبر هو الذي خطط لبنائها."],
+ [TF, "أسس البطالمة مكتبة الإسكندرية وهي من أقدم المكتبات في العالم القديم.", "صواب ✅"],
+ [TF, "ضعُفت دولة البطالمة لعدة أسباب منها زيادة الضرائب.", "صواب ✅"],
+ [TF, "تلقى بطلميوس الأول تعليمه على يد الفيلسوف أرسطو.", "خطأ ❌ — الإسكندر الأكبر هو الذي تعلم على يد أرسطو."],
+ [FL, "تم الفتح الإسلامي لمصر على يد ........", "عمرو بن العاص"],
+ [FL, "آخر ملوك البطالمة في مصر ........", "كليوباترا السابعة"],
+ [FL, "من أهم المعابد التي تركها البطالمة في مصر معبد ........", "دندرة"],
+ [WH, "ضعف وسقوط دولة البطالمة في مصر.", "للصراع على الحكم وزيادة الضرائب والثورات وتدخل روما."],
+ [WH, "رغبة الإسكندر الأكبر في السيطرة على مصر.", "لموقعها وثرواتها وليتخذها قاعدة لإمبراطوريته."],
+ [WH, "اهتمام الرومان بزراعة القمح في مصر.", "لأن مصر كانت سلة غذاء الإمبراطورية الرومانية."],
+ [AN, "كيف وصل بطلميوس الأول إلى حكم مصر؟", "بعد وفاة الإسكندر ومؤتمر بابل نال مصر، فحضر إليها واليًا ثم استقل بحكمها وجعله وراثيًا."],
+ [AN, "فسّر سبب تسمية دولة البطالمة بهذا الاسم.", "لأن ملوكها جميعًا تسمّوا باسم بطلميوس."],
+ [AN, "ما النتائج التي ترتبت على معركة أكتيوم البحرية؟", "انتصر أكتافيوس على كليوباترا وأنطونيوس، فسقطت دولة البطالمة وأصبحت مصر ولاية رومانية."],
+],
+u3l1: [
+ [TF, "يدخل الفوسفات في صناعة الآلات وقضبان السكك الحديدية.", "خطأ ❌ — الحديد هو الذي يدخل في هذه الصناعات."],
+ [TF, "محطة الزعفرانة أحد أضخم مشروعات طاقة الرياح.", "صواب ✅"],
+ [TF, "تعتمد محطة جبل الزيت على الطاقة الشمسية لتوليد الكهرباء.", "خطأ ❌ — تعتمد على طاقة الرياح."],
+ [FL, "المعدن المستخدم في صناعة أسلاك الكهرباء هو ........", "النحاس"],
+ [FL, "يوجد الفحم في منطقة المغارة بـ........", "سيناء"],
+ [FL, "البنزين والسولار من مشتقات ........", "البترول"],
+ [FL, "محطة السد العالي هي إحدى محطات الطاقة ........", "المائية"],
+ [AN, "صوّب ما تحته خط: يُستخرج معدن الحديد من واحة سيوة.", "من الواحات البحرية."],
+ [AN, "صوّب ما تحته خط: يُستخرج من منجم السكري معدن المنجنيز.", "معدن الذهب."],
+ [AN, "صوّب ما تحته خط: يُستخرج البترول من منطقة خليج العقبة.", "من منطقة خليج السويس."],
+ [WH, "يُعد الحديد من المعادن المهمة في مصر.", "لاستخدامه في الصناعات الثقيلة والآلات والبناء والسكك الحديدية."],
+ [WH, "أهمية الغاز الطبيعي.", "وقود لتوليد الكهرباء وتدخل منه صناعات كالأسمدة، ويُصدَّر، وهو أنظف من غيره."],
+ [WH, "تُعد مصر من أكثر الدول ملاءمة لإنتاج الطاقة الشمسية.", "لسطوع الشمس معظم أيام العام وقلة الغيوم واتساع الصحاري."],
+ [AN, "حدّد الأهمية الاقتصادية لمعدن المنجنيز.", "يدخل في صناعة الحديد والصلب والبطاريات."],
+ [AN, "ما النتائج المترتبة على امتلاك مصر ثروة معدنية متنوعة؟", "قيام صناعات متنوعة وتقليل الاستيراد وزيادة الدخل وفرص العمل."],
+ [AN, "لماذا تُعتبر الطاقة المتجددة أفضل من غير المتجددة؟", "لأنها لا تنفد ونظيفة وقليلة التلوث."],
+],
+u3l2: [
+ [TF, "بحيرة ناصر إحدى البحيرات المالحة في مصر.", "خطأ ❌ — بحيرة ناصر بحيرة عذبة."],
+ [TF, "تعتمد الحياة في الواحات المصرية على مياه الأمطار.", "خطأ ❌ — تعتمد على المياه الجوفية."],
+ [TF, "نهر النيل المصدر الأساسي للمياه العذبة في مصر.", "صواب ✅"],
+ [CH, "تقع بحيرة البردويل بالنسبة لشبه جزيرة سيناء جهة: (الشرق – الغرب – الجنوب – الشمال)", "الشمال"],
+ [CH, "أي مما يلي من مشروعات تدوير مياه الصرف؟ (تبطين الترع والمصارف – تحلية مياه البحر – مكافحة التلوث الصناعي – محطة بحر البقر)", "محطة بحر البقر"],
+ [CH, "أحد أدوار المواطنين تجاه موارد المياه العذبة هو: (إصدار القوانين – تنفيذ مشروعات الري – ترشيد الاستهلاك – تنقية مياه الصرف)", "ترشيد الاستهلاك"],
+ [FL, "إحدى البحيرات العذبة في مصر هي بحيرة ........", "ناصر"],
+ [FL, "تتمثل المياه المالحة بمصر في البحيرات والبحار مثل البحر المتوسط والبحر ........", "الأحمر"],
+ [AN, "ما المقصود بتحلية مياه البحر؟", "إزالة الأملاح من مياه البحر لتصبح صالحة للشرب والري."],
+ [AN, "ما المقصود بتدوير مياه الصرف الزراعي؟", "معالجة مياه الصرف الزراعي وإعادة استخدامها في الري."],
+ [WH, "إنشاء الدولة محطة تحلية مياه العين السخنة.", "لمواجهة نقص المياه العذبة وتوفير مياه صالحة للاستخدام."],
+ [WH, "تعرّض المياه في مصر للتلوث.", "بسبب إلقاء مخلفات المصانع والصرف الصحي والقمامة في المجاري المائية."],
+ [AN, "احسب الفرق بين نصيب الفرد من المياه العذبة في مصر بين عامي ١٩٦٢ و٢٠٢٢م (من الرسم: ٢٠٠٠ م³ و٥٣٠ م³).", "٢٠٠٠ − ٥٣٠ = ١٤٧٠ م³."],
+ [AN, "اكتب أسباب تراجع نصيب الفرد من المياه العذبة في مصر.", "زيادة عدد السكان مع ثبات حصة مصر من مياه النيل، والتلوث."],
+ [AN, "على ماذا يدل اعتراف المصري القديم بعدم تلويث الماء؟", "على احترامه للمياه وحرصه على حمايتها وتقديسه لها."],
+],
+u3l3: [
+ [TF, "تقتصر رؤية مصر ٢٠٣٠ على المشروعات الاقتصادية.", "خطأ ❌ — تشمل أيضًا الجوانب الاجتماعية والبيئية."],
+ [TF, "تقع محطة بنبان شمال مصر بمحافظة الإسكندرية.", "خطأ ❌ — تقع جنوب مصر في محافظة أسوان."],
+ [TF, "يعمل مشروع الدلتا الجديدة على توطين الصناعات المرتبطة بالزراعة.", "صواب ✅"],
+ [TF, "ساهمت العاصمة الإدارية الجديدة في حل مشكلة الكثافة السكانية بالقاهرة.", "صواب ✅"],
+ [FL, "يساعد مشروع بنبان مصر على تعزيز التحول نحو الطاقة ........", "الشمسية (النظيفة)"],
+ [FL, "يهدف مشروع بركة غليون إلى زيادة إنتاج مصر من ........", "الثروة السمكية"],
+ [AN, "ما الهدف من إنشاء العاصمة الإدارية الجديدة؟", "تخفيف الزحام والتكدس والتلوث في القاهرة وتحقيق نهضة عمرانية مستدامة."],
+ [AN, "ما المقصود بمفهوم جودة الحياة؟", "مستوى الرفاهية والرضا عن الحياة في المجتمع، ويُقاس بالصحة والتعليم والدخل والبيئة والأمان والخدمات."],
+ [WH, "أهمية مشروع الدلتا الجديدة.", "استصلاح واستزراع أراضٍ جديدة وزيادة الإنتاج الزراعي والأمن الغذائي وتوفير فرص عمل."],
+ [AN, "ما النتائج المترتبة على تطوير الدولة شبكة الطرق والكباري؟", "تسهيل النقل وربط المدن وتنشيط التجارة والاستثمار."],
+ [AN, "ما العلاقة بين موقع مصر وإنتاج الطاقة المتجددة؟", "موقعها في الحزام الشمسي وسطوع الشمس وقوة الرياح يساعدان على إنتاج الطاقة الشمسية والرياح."],
+ [WH, "اهتمام الدولة بحفر قناة السويس الجديدة.", "لزيادة قدرة القناة على استقبال السفن وزيادة إيراداتها."],
+],
+
+/* ---------- Science (school textbook: Science G5 T1) ---------- */
+s1l1: [
+ ["Choose", "When you bend your arm, what happens to the inner muscle (the biceps)? A: It relaxes and becomes thin. B: It contracts and becomes thick and hard.", "B — It contracts and becomes thick and hard."],
+ ["Fill in", "Muscles pull bones and move the body by ( ) — relaxing / contracting / expanding.", "contracting"],
+ ["Answer", "What do you call the place where two bones meet and allow movement?", "A joint."],
+ ["Choose", "Which statement correctly explains the movement of joints? A: All joints can be rotated in any direction. B: The direction and range of bending are determined by the location of the joint.", "B"],
+ ["Fill in", "Joints have ( ), which acts as a cushion so that bones do not rub directly against each other.", "cartilage"],
+ ["Choose", "Which is correct about the muscles when you stretch your arm? A: The outer muscle contracts and the inner muscle relaxes. B: The inner muscle contracts and the outer muscle relaxes.", "A"],
+ ["Choose", "Which statement correctly explains the movement of the human body? A: Muscles move the body by pushing the bones. B: Muscles move the body by pulling the bones.", "B — pulling"],
+ ["Choose", "Which of the following is NOT a role of bones? A: Supports the body firmly. B: Protects important organs. C: Can contract and move by itself, just like muscles.", "C"],
+ ["Answer", "What do you call the framework of bones that forms the shape of the body?", "The skeleton."],
+ ["Choose", "Which important organs do the ribs protect in a cage-like shape? (Choose two) A: Brain B: Heart C: Lungs D: Stomach", "B and C — the heart and the lungs."],
+ ["Fill in", "Animals like dogs and horses also move by ( 1 ) contracting and pulling ( 2 ). [muscles / skin] [bones / hair]", "1 muscles — 2 bones"],
+ ["Choose", "What does the difference in bone length and shape among animals depend on? A: Body color B: How they live (how they run, fly, etc.)", "B"],
+ ["Fill in", "What is the main role of the skull? To protect the ( ).", "brain"],
+ ["Choose", "Which is correct about the backbone? A: It is one long, unbendable bone. B: It is made of many small connected bones, so you can bend your body.", "B"],
+],
+s1l2: [
+ ["Fill in", "In summer, the temperature gets ( 1 ) [higher / lower], so many plants spread their leaves wide and ( 2 ) [produce / scatter] their flowers.", "1 higher — 2 produce"],
+ ["Choose", "Which is the correct order for a plant's yearly cycle? A: Fruit grows, Flowers bloom, Seeds sprout. B: Seeds sprout, Flowers bloom, Fruit grows. C: Seeds sprout, Fruit grows, Flowers bloom.", "B — Seeds sprout, Flowers bloom, Fruit grows."],
+ ["Fill in", "Lizards and other animals become slow when the temperature gets ( 1 ), and they can move quickly when the temperature gets ( 2 ). [low / high]", "1 low — 2 high"],
+ ["Answer", "What is it called when animals stay still to conserve energy during the cold winter?", "Hibernation."],
+],
+s1l3: [
+ ["Choose", "What color does the kidney bean cotyledon change to when iodine solution is added? A: Red B: Blue-black C: Green", "B — Blue-black (it contains starch)."],
+ ["Choose", "Choose all correct answers about kidney bean seeds. A: Cotyledons do not contain nutrients (starch). B: Inside the seed there is a part that will become roots and stems. C: Starch becomes the nutrient for germination.", "B and C"],
+ ["Choose", "In the experiment on water and germination, which are the conditions kept the same in the two cups? A: Temperature B: Amount of water C: Brightness", "A and C — the amount of water is the condition that changes."],
+ ["Answer", "Is water necessary for seed germination?", "Yes. The seeds on dry cotton did not germinate, while the seeds on moist cotton did."],
+ ["Choose", "In the experiment on air and germination, what do you do with the seeds in cup B? A: Submerge them in water B: Place them in a dry place C: Put them in the refrigerator", "A — Submerge them in water."],
+ ["Choose", "In the air experiment, which conditions are kept the same in cups A and B? A: Place both in a place with air B: Same temperature C: Give water to both", "B and C"],
+ ["Choose", "In the temperature experiment, which is the condition to change? A: Presence of water B: Presence of air C: Temperature (high or low)", "C"],
+ ["Fill in", "Why didn't the seeds in the refrigerator germinate? Because the ( ) was too low.", "temperature"],
+ ["Choose", "Why did the seeds submerged in water not germinate? A: The water was cold. B: They were not exposed to air. C: There were no nutrients in the water.", "B"],
+ ["Answer", "Write down what you learned from the experiment on whether air is necessary for germination.", "Seeds need air to germinate; the seeds under water did not germinate."],
+ ["Choose", "Which statement explains the relationship between germination and temperature? A: Seeds germinate even in ice-cold places. B: An appropriate warmth is necessary. C: There is no relationship.", "B"],
+ ["Answer", "Write down all three conditions necessary for seed germination.", "Water, air, and an appropriate temperature."],
+ ["Answer", "Seeds were placed on moistened cotton and put in the refrigerator. Will they germinate?", "No — the temperature is too low."],
+ ["Fill in", "Sunlight and ( ) are needed for growth after germination, but not for germination itself.", "fertilizer"],
+ ["Answer", "Seeds were placed on moistened cotton in a completely dark box in a warm room. Will they germinate?", "Yes — light is not needed for germination."],
+],
+s2l1: [
+ ["Fill in", "Plants grown with lots of sunlight get ( 1 ) leaves [whitish / dark green / yellowish] and grow ( 2 ) stems [long and thin / thin and weak / thick and strong].", "1 dark green — 2 thick and strong"],
+ ["Answer", "What is the condition to change between the 2 pots in the experiment to check the effect of sunlight?", "Sunlight (with or without sunlight)."],
+ ["Choose", "Seedlings grown with fertilizer ( ) than seedlings grown without it. A: grow bigger B: grow smaller C: die quickly", "A — grow bigger"],
+ ["Choose", "Which TWO conditions are kept the same in the fertilizer experiment? A: Amount of fertilizer B: How sunlight hits C: Amount of water", "B and C"],
+ ["Choose", "Which correctly describes a seedling grown without sunlight? A: Leaves grow big and stems grow thick. B: Leaves become yellowish and stems grow thin and long. C: It does not grow at all.", "B"],
+ ["Choose", "Which explanation about sunlight and plants is correct? A: Plants grow healthy without sunlight as long as they have water. B: Plants need sunlight to grow strong.", "B"],
+ ["Choose", "Which is NOT an effect of fertilizer on a plant? A: Stems grow taller. B: The number of leaves decreases. C: The whole plant grows bigger.", "B"],
+ ["Fill in", "Plants make nutrients by getting light from the ( 1 ), and absorb ( 2 ) to grow bigger.", "1 sun — 2 fertilizer (nutrients from the soil)"],
+],
+s2l2: [
+ ["Answer", "Which luffa flower has a swelling at the base that will become a fruit?", "The female flower."],
+ ["Answer", "What do we call the part in the male flower that makes the yellow powder?", "The stamen."],
+ ["Answer", "What is the yellow powder called?", "Pollen."],
+ ["Choose", "Which is correct about luffa flowers? A: Both a stamen and a pistil are in one flower. B: The male flower has a stamen, and the female flower has a pistil and a swelling. C: The male flower has a pistil, and the female flower has a stamen and a swelling.", "B"],
+ ["Answer", "What will the swelling at the base of the female flower become?", "A fruit."],
+ ["Answer", "When the eyepiece lens is 10× and the objective lens is 40×, what is the magnification of the microscope?", "10 × 40 = 400×"],
+ ["Answer", "When observing with a microscope, do you start with low or high magnification?", "Low magnification."],
+ ["Fill in", "The microscope is used in a flat and ( 1 ) place where direct ( 2 ) does not hit.", "1 bright — 2 sunlight"],
+ ["Answer", "Put the steps in order: A Adjust the focus while slowly widening the space between slide and lens. B Adjust the reflector to make the view bright. C Put the prepared slide on the stage. D Turn the knob to bring the slide close to the objective lens.", "B → C → D → A"],
+ ["Answer", "What is it called when pollen attaches to the tip of a pistil?", "Pollination."],
+ ["Choose", "Choose the correct order after pollination. A: Pollination → the swelling at the base grows → seeds are made inside the fruit. B: Seeds are made → pollination → swelling grows. C: Pollination → seeds are made → swelling grows.", "A"],
+ ["Fill in", "What carries pollen for luffa plants to pollinate? Bugs like ( ).", "bees"],
+ ["Choose", "What happens to a female flower that is not pollinated? A: The fruit slowly grows bigger. B: It turns yellow, and the fruit falls off without growing. C: It becomes a seed as it is.", "B"],
+ ["Choose", "In a common flower structure, which is the correct order from the outside? A: Pistil, Petal, Sepal. B: Sepal, Petal, Pistil.", "B — Sepal, Petal, Pistil"],
+ ["Choose", "When adjusting the focus, in which direction do you turn the knob while looking through the lens? A: Bring the objective lens closer to the slide. B: Move the objective lens away from the slide.", "B"],
+],
+s2l3: [
+ ["Choose", "Which is the correct order for the stages of human growth? A: Childhood, Youth, Infancy, Adulthood, Old Age. B: Infancy, Childhood, Youth, Adulthood, Old Age. C: Infancy, Youth, Childhood, Adulthood, Old Age.", "B"],
+ ["Answer", "What do you call the stage right after birth when babies depend completely on mother's milk and care?", "Infancy."],
+ ["Choose", "Who does a human life begin from? A: Brothers and sisters B: A father and a mother C: Teachers and friends", "B"],
+ ["Choose", "Why do children look like their parents? A: They always live together. B: They eat the same things. C: They inherit features from their parents.", "C"],
+ ["Choose", "What are the necessary conditions to grow strong and healthy? (Choose all) A: Eating a healthy diet B: Watching TV all day C: Staying up late D: Getting enough sleep E: Getting proper exercise", "A, D and E"],
+ ["Choose", "What is the important role of sleep? A: It allows the brain to rest and helps build the body. B: It makes the heart and muscles stronger. C: It fills up the stomach.", "A"],
+],
+s3l1: [
+ ["Choose", "How do cats have their babies? A: They grow from seeds. B: They lay eggs. C: They give birth to babies.", "C"],
+ ["Answer", "What do newborn kittens drink to grow?", "Their mother's milk."],
+ ["Choose", "How do fish like Tilapia reproduce? A: They give birth. B: They lay eggs. C: They reproduce by dividing.", "B"],
+ ["Answer", "What do you call it when baby fish come out of eggs?", "Hatching."],
+ ["Answer", "Group the animals: camel, snake, cat, frog.", "Give birth to babies: camel, cat. Lay eggs: snake, frog."],
+ ["Answer", "What do you call it when a new life is born from a father (male) and a mother (female)?", "Reproduction."],
+ ["Choose", "Where does a mother cat protect and raise her babies until they are born? A: In the water B: In the soil C: Inside her own body", "C"],
+ ["Choose", "Why do fish lay a huge amount of eggs in the water? A: The water is safe. B: To make sure as many small fish as possible can survive in the open water. C: To give them as a present.", "B"],
+ ["Fill in", "Reproduction is the ability of living organisms to create new individuals of the ( 1 ) kind as themselves, ensuring their ( 2 ) on Earth.", "1 same — 2 survival"],
+ ["Choose", "What do you call the places protected by countries so that animals can safely pass on life? A: Amusement parks B: Museums C: Nature reserves", "C — Nature reserves"],
+],
+s3l2: [
+ ["Answer", "When we consider the whole sky as 8, what do we call the proportion of the sky covered by clouds?", "The cloud cover."],
+ ["Choose", "You checked the cloud cover and it was 5. What is the weather? A: Sunny B: Cloudy C: Rainy", "A — Sunny (0 to 6 is sunny)."],
+ ["Fill in", "When checking the direction clouds move, it is easier if you choose a ( ) like a tree or a building to observe.", "reference point (something that does not move)"],
+ ["Choose", "In most cases, which direction do clouds move? A: East to west B: West to east C: North to south D: South to north", "B — from west to east"],
+ ["Choose", "When the weather is determined as cloudy, what is the minimum cloud cover? A: 1 B: 6 C: 7", "C — 7 or more"],
+ ["Fill in", "Whether the cloud cover is 0 or 6, both types of weather are called ( ).", "sunny"],
+ ["Choose", "Which statement explains cloud movement and weather change? A: Rain clouds seen in the west will soon come here. B: Rain clouds seen in the east will come here right away.", "A"],
+ ["Choose", "Which is an incorrect method for observing cloud movement? A: Observing from inside a moving car. B: Observing every 15 minutes from a reference point. C: Using a compass and watching clouds pass a building.", "A"],
+],
+s3l3: [
+ ["Answer", "What do you call the process of water changing from its surface into invisible water vapor?", "Evaporation."],
+ ["Choose", "Under what weather does laundry dry quickly? A: High temperature and sunny B: Low temperature and heavily cloudy C: Rainy", "A"],
+ ["Answer", "What do you call the process of water vapor in the air cooling and changing into liquid water?", "Condensation."],
+ ["Choose", "Why did water drops form on the outside of a glass of ice water? What was cooled? A: The water inside the glass B: The water vapor in the surrounding air", "B"],
+ ["Choose", "Why did the water in the puddle disappear? A: By magic B: It turned into water vapor and went into the air. C: It was absorbed into the soil.", "B"],
+ ["Fill in", "The process of water changing into ( ) water vapor from its surface is called evaporation. [visible / invisible]", "invisible"],
+ ["Choose", "Which is an example of condensation? A: Water turns into ice in a freezer. B: Hot water boils and steam comes out. C: On a cold winter morning the window glass becomes foggy and water drops form.", "C"],
+ ["Fill in", "The invisible water vapor in the air appears as water drops when the temperature ( ). [rises / falls / stays the same]", "falls"],
+ ["Choose", "What is the correct order of the water cycle? A: Evaporates from the sea, flows into a river, rains, returns to clouds. B: Evaporates from the sea, becomes clouds, rains, returns to the sea. C: Rains, evaporates, returns to the sea, becomes clouds.", "B"],
+ ["Choose", "When water goes up into the sky and evaporates, what is needed? A: Heat from the sun B: Coldness of a pitch-black night C: Light from the stars", "A — heat from the sun"],
+],
+};
+
 /* ===== Coach (answer bank search) + Exercises, per subject ===== */
 const KSW=new Set(('في من علي الي عن ما ماذا هل هو هي هذا هذه ذلك التي الذي كل او ثم قد لا لم لن ان كان يكون تكون مع به بها له لها اي اختر اختاري الاجابه الصحيحه صواب خطا اكمل ضع علامه امام العباره التاليه بين القوسين وصل صل علل فسر لماذا يحدث لو ماذا كيف هي هم هن نحن انت انتم عند حتي قبل بعد ايضا اذا اذ كما مما عما فيما بما لما الا غير بعض'+' a an the is are was were be been of to in on at for and or it its this that these those with as by from what which who why how do does did can could will would should you your we our they them he she his her not no yes all any choose correct answer true false complete put write following sentence between mark').split(' '));
 const kNrm = s => String(s == null ? '' : s).replace(/<[^>]+>/g, ' ').toLowerCase().replace(/[ً-ٰـ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[^؀-ۿa-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -2468,6 +2755,7 @@ function kbBuild(sj) {
     const src = l;
     l.cards.forEach(c => add({ t: 'card', q: c[1], x: c[2], a: c[2], ico: c[0], src }));
     l.vocab.forEach(v => add({ t: 'vocab', q: v[0], x: v[1], a: v[1], src }));
+    (EX_DATA[l.id] || []).forEach(it => add({ t: 'q', q: it[1], x: it[2], a: it[2], src, en: sj.en }));
     l.qs.forEach(q => add({ t: 'q', q: q.q, x: [q.ok, ...(q.bad || []), ...(q.items || []), ...(q.pairs || []).flat()].filter(x => typeof x === 'string').join(' '), a: qAnswer(q), why: q.why, src, en: sj.en }));
   });
   ix.list.forEach(e => e.ta.forEach(t => { ix.df[t] = (ix.df[t] || 0) + 1; })); ix.N = ix.list.length;
@@ -2553,13 +2841,16 @@ Object.assign(SCREENS, {
   },
 
   exercises(lid) {
+    const EXS = { Choose: 'Choose the correct answer', 'Fill in': 'Fill in the blank', Answer: 'Answer' };
+    const items = l => EX_DATA[l.id] || [];
     if (!lid) {
-      APP.innerHTML = bar(T('📝 التمارين', '📝 Exercises')) + '<div class="exl">' + UNITS.map(u => `<div class="exu">${u.icon} ${esc(LT(u))}</div>` + u.lessons.map(l => `<button class="btn exc" data-id="${l.id}"><b>${l.icon} ${esc(LT(l))}</b><span>${EN ? l.qs.length + ' questions' : D(l.qs.length) + ' سؤال'}</span></button>`).join('')).join('') + '</div>'; wireBack('home');
+      APP.innerHTML = bar(T('📝 التمارين', '📝 Exercises')) + '<div class="exnote">' + T('📘 أسئلة الكتاب المدرسي', '📘 Questions from your school textbook') + '</div><div class="exl">' + UNITS.map(u => `<div class="exu">${u.icon} ${esc(LT(u))}</div>` + u.lessons.map(l => `<button class="btn exc" data-id="${l.id}"><b>${l.icon} ${esc(LT(l))}</b><span>${EN ? items(l).length + ' questions' : D(items(l).length) + ' سؤال'}</span></button>`).join('')).join('') + '</div>'; wireBack('home');
       APP.querySelectorAll('.exc').forEach(b => b.onclick = () => { sfx('click'); go('exercises', b.dataset.id); }); return;
     }
     const l = LBY[lid]; if (!l) return go('exercises');
-    const secs = {}; l.qs.forEach(q => (secs[qKind(q)] = secs[qKind(q)] || []).push(q));
-    const body = KORDER.filter(k => secs[k]).map((k, si) => `<div class="exs"><div class="exst">${N(si + 1)} · ${KNAME(k)} <small>${N(secs[k].length)}</small></div>` + secs[k].map((q, i) => `<div class="exq"><button class="exh"><i>${N(i + 1)}</i><span class="${EN ? 'ltr' : ''}">${H(q.q)}</span></button><div class="exa" hidden><div class="kans ${EN ? 'ltr' : ''}">${H(qAnswer(q))}</div>${q.why ? `<div class="kw">💡 ${H(q.why)}</div>` : ''}</div></div>`).join('') + '</div>').join('');
+    const secs = [], idx = {}; items(l).forEach(it => { if (!(it[0] in idx)) { idx[it[0]] = secs.length; secs.push([it[0], []]); } secs[idx[it[0]]][1].push(it); });
+    let n = 0;
+    const body = secs.map(([k, arr]) => `<div class="exs"><div class="exst">${esc(EN ? (EXS[k] || k) : k)} <small>${N(arr.length)}</small></div>` + arr.map(it => `<div class="exq"><button class="exh"><i>${N(++n)}</i><span class="${EN ? 'ltr' : ''}">${H(it[1])}</span></button><div class="exa" hidden><div class="kans ${EN ? 'ltr' : ''}">✅ ${H(it[2])}</div></div></div>`).join('') + '</div>').join('');
     APP.innerHTML = bar('📝 ' + esc(LT(l))) + `<div class="exl">${body}</div>`; wireBack('exercises');
     APP.querySelectorAll('.exh').forEach(b => b.onclick = () => { sfx('click'); const a = b.nextElementSibling; a.hidden = !a.hidden; b.parentNode.classList.toggle('open', !a.hidden); });
   }
